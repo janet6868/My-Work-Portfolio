@@ -1,0 +1,3302 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Financial Instruments-ICRISAT">
+<meta name="dcterms.date" content="2024-07-30">
+
+<title>Financial Instruments-FIS1</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="Dagana_dhs_flooding_updates_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Dagana_dhs_flooding_updates_files/libs/quarto-html/quarto.js"></script>
+<script src="Dagana_dhs_flooding_updates_files/libs/quarto-html/popper.min.js"></script>
+<script src="Dagana_dhs_flooding_updates_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Dagana_dhs_flooding_updates_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Dagana_dhs_flooding_updates_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Dagana_dhs_flooding_updates_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="Dagana_dhs_flooding_updates_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="Dagana_dhs_flooding_updates_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Dagana_dhs_flooding_updates_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Dagana_dhs_flooding_updates_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="Dagana_dhs_flooding_updates_files/libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<style>html{ scroll-behavior: smooth; }</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body>
+
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-page">
+      <h1 class="title">Financial Instruments-FIS1</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta column-page">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Financial Instruments-ICRISAT </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 30, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="page-columns page-rows-contents page-layout-full">
+
+<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
+
+
+
+
+
+<style type="text/css">
+
+h1.title {
+  font-size: 20px;
+  color: White;
+  text-align: center;
+}
+h4.author { /* Header 4 - and the author and data headers use this too  */
+    font-size: 16px;
+  font-family: "Source Sans Pro Semibold", Times, serif;
+  color: Red;
+  text-align: center;
+}
+h4.date { /* Header 4 - and the author and data headers use this too  */
+  font-size: 16px;
+  font-family: "Source Sans Pro Semibold", Times, serif;
+  color: Red;
+  text-align: center;
+}
+
+.justify {
+  text-align: justify !important
+}
+
+</style>
+<hr>
+<div style="text-align:center">
+<h2 class="anchored">
+Dagana dry hot season flooding detection analysis
+</h2>
+</div>
+<p><br></p>
+<section id="overview" class="level3">
+<h3 class="anchored" data-anchor-id="overview">Overview</h3>
+<div class="justify">
+<p>The agricultural sub-sector, particularly smallholder agriculture, is the focal point of the FIS, Local risk control service work stream. Inter-farm variability in management practices among small farms largely determines yield outcomes. Optimizing agronomic practices alone is insufficient for ensuring food security- significantly more inputs are required. The primary challenge lies within the agricultural value chain, particularly concerning access to credit for small farmers, which financial service providers perceive as risky and costly. The objective of this work stream is to develop services that leverage Earth Observation (EO) to mitigate risk perception, thereby facilitating investments in agriculture. These services aim to reduce the costs associated with quantifying risk and value at risk while enabling access to innovative financing options like climate finance. Emphasis will be placed on interventions bridging the agriculture and environmental sectors, particularly within the Agriculture and Food Security and Ecosystem and Carbon Management thematic areas in the SERVIR context. EO-based solutions can revolutionize risk management in agriculture, addressing challenges such as delays in planting due to late credit and input arrivals, which affect harvest quality, sales prices, and overall risk in the agricultural value chain.</p>
+</div>
+</section>
+<section id="fis1.6-fusion-of-sentinel-1-and-sentinel-2-for-paddy-flooding-timing-estimates-in-the-dagana" class="level3">
+<h3 class="anchored" data-anchor-id="fis1.6-fusion-of-sentinel-1-and-sentinel-2-for-paddy-flooding-timing-estimates-in-the-dagana">FIS1.6: Fusion of Sentinel 1 and Sentinel 2 for paddy flooding timing estimates in the Dagana</h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="justify">
+<p>We demonstrate the flooding activities and the impact of credit access.</p>
+<p>A brief summary of the analysis:</p>
+<pre><code>- Flooding timelines-analyze the flooding data over time to identify trends and patterns.
+    - Create a line chart or area chart to visualize the flooding area or number of affected locations over the given time period.
+    - Highlight significant events or peak flooding periods..
+- Flooding Progression: Analyze how the flooding progressed over time in different locations.
+    - Create a heatmap or a series of maps to visualize the spatial and temporal distribution of flooding.
+    - Identify areas where flooding started early or persisted for a longer duration.
+- Comparison with Historical Data-
+    -  Use historical (previous years) flooding data, compare the current season flooding activities.
+    - Create a bar chart or line chart to show the comparison and highlight any significant deviations.
+    - Provide insights into whether the current flooding is above or below historical levels.
+- Impact Analysis on access to credit.
+    - Assess the potential impact of early access to credit on flooding on various locations.
+    - Analyze the data in relation to land use, SRI practices, population density, or critical infrastructure.
+    - Create a risk map or categorize localities into different risk levels.
+    - Provide recommendations for flood mitigation measures or preparedness planning.</code></pre>
+<p><em>Variable included</em></p>
+<pre><code>- crop_name: Rice
+- Region: Dagana, Senegal
+- season_name:  Dry hot season 
+- planting_year: 2024, 2023
+- Estimated flooding dates</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="data-availability" class="level3">
+<h3 class="anchored" data-anchor-id="data-availability">Data availability</h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="justify">
+<p>Google Earth Engine hosts an extensive archive of Sentinel-1 and Sentinel-2 data, encompassing dual-polarized and interferometric wide-swath images for Sentinel-1, and multispectral imagery in the visible and infrared spectrum for Sentinel-2. This diverse dataset is available at various spatial and temporal resolutions, making it suitable for a wide range of applications.</p>
+</div>
+</div>
+</div>
+<section id="workflow-description" class="level4 justify">
+<h4 class="anchored" data-anchor-id="workflow-description"><strong>Workflow description</strong></h4>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sentinel 2
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Data acquistion:
+<ul>
+<li>Sentinel-2’s multispectral capabilities are well-suited for land cover and vegetation analysis. With its wide coverage and high spatial resolution, it provides valuable information for monitoring changes in land cover and vegetation growth</li>
+<li>We use area of interest boundaries to access through Google Earth Engine: RGB, Normalized Difference Water Index(NDWI), Modified Normalized Difference Water Index (MNDWI), Normalized Difference Vegetation Index (NDVI) and the mask cloud layer depending on your current task.</li>
+<li>Clouds are identified from the S2 cloud probability dataset (s2cloudless) and downloaded as cloud images. You can set the probability/percentage of cloud presence in all images between 0 and 100.</li>
+<li>s2cloudless is a machine learning algorithm for computing cloud masks on Sentinel-2 imagery. There is a pre-computed cloud masks for the entire Sentinel-2 archive via the Sentinel Hub service. It assigns each pixel in an image a cloud probability solely based on the pixel’s ten Sentinel-2 band values.</li>
+<li>MNDWI is calculated using the Green band mid infrared bands((Green - SWIR (band 11) ) / (Green + SWIR (band 11))).</li>
+<li>One advantage of MNDWI is that it diminishes built-up areas that are always confused as water bodies compared to NDWI.</li>
+<li>The major limitations of MNDWI: it easily misclassifies shadow and dark roads as water bodies.</li>
+<li>The water bodies appear as bright pixels while dryland appears dark pixels.</li>
+<li>In prepocessing the images before downloading, permanent water is excluded before gnerating the MNDWI tiff.</li>
+</ul></li>
+<li>Extracting the flooded areas:
+<ul>
+<li>Firstly, we generate the flooding map that shows the flooded areas extend.</li>
+<li>The MNDWI values range from -1≤x≤1 and we apply series of logical AND operations to the MNDWI tiff files to identify pixels that represent water bodies (x&gt;0) and that have low cloud cover (y&lt;40).</li>
+<li>The initial MNDWI TIFF file introduced into the workflow is important when extracting flooded areas. Initially, a working array is generated from the RGB TIFF file. Subsequently, using numpy array operations, update this working array with pixel values from the MNDWI TIFFs. Afterwards, assign a value, say 2, to all pixels in the working array where the corresponding pixel values in the first MNDWI TIFF are greater than 0 (indicating water pixels), effectively masking out all pixels where water is present.</li>
+<li>Subsequent MNDWI tiff files’ water pixels are then accumulated through a logical process that first verifies if the pixel in the working array is already identified as part of water pixels. This step ensures that pixels flagged in previous iterations are not overwritten.</li>
+<li>The resulting image contains a value of 0 for all non-water pixels, and the day of year for each water pixel.</li>
+<li>Secondly, we extract the convert the water pixels into areas in hectares. Create a proportion of area flooded for each grid cell/plot/point within the area, using a reference RGB image and the shapefile.</li>
+<li>Create a dataframe from the proportion data under flooding for each date.</li>
+</ul></li>
+<li>Estimate the flooding dates
+<ul>
+<li>The aim is to determine the date of the maximum flooding.</li>
+</ul></li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Sentinel 1
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>Data acquistion:</p>
+<ul>
+<li>Sentinel-1, operating in C-band, has proven to be a valuable asset for flood monitoring due to its unique capabilities. Its all-weather and day-and-night imaging capacity, coupled with the ability to penetrate through clouds and capture surface changes, makes it ideal for flood detection.</li>
+<li>To ensure data homogeneity, a meticulous filtering process was executed. This process encompassed the selection of data based on specific criteria, including instrument mode (’IW’ for Interferometric Wide Swath), orbit properties (’ASCENDING’ or ’DESCENDING’), and transmitterreceiver polarizations (’Vertical-Vertical’ (’VV’) and ’Vertical-Horizontal’ (’VH’)).</li>
+<li>Furthermore, the Sentinel-1 data was segregated into distinct polarizations for ’VV,’ ’VH,’ and ’VV/VH’ (ratio) images.</li>
+<li>The VV band is a good indicator of structural characteristics, such as vegetation density and height, making it useful for crop monitoring. As vegetation matures and its density increases, the VV signal tends to decrease due to increased attenuation caused by the dense canopy.</li>
+<li>Conversely, the VH band is sensitive to surface roughness and moisture content. In the context of rice fields, the VH band can be valuable for flood mapping as it enables the identification of flooded areas. Water bodies, including flooded rice paddies, typically exhibit high VH backscatter due to the specular reflection of radar waves on the smooth water surface. By comparing the VV/VH ratio, it becomes possible to differentiate between standing crops and harvested or sparse areas. Harvested or sparse areas tend to have higher VV/VH ratios due to reduced vegetation density. Similarly, flooded rice fields exhibit different radar backscatter characteristics compared to non-flooded areas.</li>
+<li>The VV polarization is sensitive to the presence of water, while the VH polarization is influenced by both surface roughness and the presence of water.</li>
+<li>By comparing the VV/VH ratio, flooded areas in rice fields can be identified, marked by higher VV/VH ratios due to increased backscatter from water.</li>
+</ul></li>
+<li><p>Extracting the flooded areas:</p>
+<ul>
+<li>Sentinel-1 SAR images are filtered based on instrument mode, orbit properties, and polarization (VV, VH, VV/VH). Then two image collections are defined: “Before-collection” for baseline conditions and “After-collection” for monitoring changes during and after potential flooding events.</li>
+<li>Flood area detection: Comparison of “Before” and “After” images to identify changes using a threshold value (1.25) based on statistical properties.</li>
+<li>The water pixels are converted into areas in hectares.</li>
+</ul></li>
+<li><p>Estimate the flooding dates</p>
+<ul>
+<li>The aim is to determine the date of the maximum flooding.</li>
+</ul></li>
+</ol>
+</div>
+</div>
+</section>
+</section>
+<section id="flooding-activities-progress-and-timeline-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="flooding-activities-progress-and-timeline-analysis">1. Flooding activities progress and timeline analysis</h3>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+a. The timeseries data for S1, S2, and SAED data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="justify">
+<p>The following data shows the cumulative flooded area over time. Included also is SAED data for the dry hot season in 2023 and 2024.</p>
+</div>
+</div>
+</div>
+<div id="701dc2c8" class="cell" data-execution_count="2">
+<div class="cell-output cell-output-display">
+<div>
+
+<div style="height: 400px; width: 100%; overflow-x: auto; overflow-y: auto;">
+    
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Date</th>
+<th data-quarto-table-cell-role="th">Area(ha)</th>
+<th data-quarto-table-cell-role="th">Data_source</th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">Year</th>
+<th data-quarto-table-cell-role="th">Day of year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2023-01-07</td>
+<td>874.06</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-01-07</td>
+<td>2023</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2023-01-12</td>
+<td>2579.78</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-01-12</td>
+<td>2023</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2023-01-17</td>
+<td>4360.24</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-01-17</td>
+<td>2023</td>
+<td>17</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2023-01-22</td>
+<td>4842.98</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-01-22</td>
+<td>2023</td>
+<td>22</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2023-01-27</td>
+<td>5098.00</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-01-27</td>
+<td>2023</td>
+<td>27</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>2023-02-01</td>
+<td>5722.50</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-02-01</td>
+<td>2023</td>
+<td>32</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>2023-02-06</td>
+<td>7000.35</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-02-06</td>
+<td>2023</td>
+<td>37</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>2023-02-11</td>
+<td>7595.73</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-02-11</td>
+<td>2023</td>
+<td>42</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>2023-02-16</td>
+<td>8029.28</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-02-16</td>
+<td>2023</td>
+<td>47</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>2023-02-21</td>
+<td>8898.08</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-02-21</td>
+<td>2023</td>
+<td>52</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>2023-02-26</td>
+<td>11077.92</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-02-26</td>
+<td>2023</td>
+<td>57</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">11</td>
+<td>2023-03-03</td>
+<td>15365.54</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-03-03</td>
+<td>2023</td>
+<td>62</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12</td>
+<td>2023-03-08</td>
+<td>20195.46</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-03-08</td>
+<td>2023</td>
+<td>67</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">13</td>
+<td>2023-03-13</td>
+<td>20502.14</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-03-13</td>
+<td>2023</td>
+<td>72</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">14</td>
+<td>2023-03-18</td>
+<td>21566.32</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-03-18</td>
+<td>2023</td>
+<td>77</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">15</td>
+<td>2023-03-23</td>
+<td>28874.40</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-03-23</td>
+<td>2023</td>
+<td>82</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16</td>
+<td>2023-03-28</td>
+<td>30481.96</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-03-28</td>
+<td>2023</td>
+<td>87</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17</td>
+<td>2023-04-02</td>
+<td>30824.37</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-04-02</td>
+<td>2023</td>
+<td>92</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">18</td>
+<td>2023-04-07</td>
+<td>32479.05</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-04-07</td>
+<td>2023</td>
+<td>97</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">19</td>
+<td>2023-04-12</td>
+<td>32500.22</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-04-12</td>
+<td>2023</td>
+<td>102</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20</td>
+<td>2023-04-17</td>
+<td>34603.62</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-04-17</td>
+<td>2023</td>
+<td>107</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">21</td>
+<td>2023-04-22</td>
+<td>36720.57</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-04-22</td>
+<td>2023</td>
+<td>112</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">22</td>
+<td>2023-04-27</td>
+<td>37370.45</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-04-27</td>
+<td>2023</td>
+<td>117</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">23</td>
+<td>2023-05-02</td>
+<td>37699.19</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-05-02</td>
+<td>2023</td>
+<td>122</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">24</td>
+<td>2023-05-07</td>
+<td>37703.05</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-05-07</td>
+<td>2023</td>
+<td>127</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">25</td>
+<td>2023-05-12</td>
+<td>37962.33</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-05-12</td>
+<td>2023</td>
+<td>132</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26</td>
+<td>2023-05-17</td>
+<td>38148.42</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-05-17</td>
+<td>2023</td>
+<td>137</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">27</td>
+<td>2023-05-22</td>
+<td>38253.32</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-05-22</td>
+<td>2023</td>
+<td>142</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">28</td>
+<td>2023-05-27</td>
+<td>38281.87</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-05-27</td>
+<td>2023</td>
+<td>147</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">29</td>
+<td>2023-06-01</td>
+<td>38324.78</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-06-01</td>
+<td>2023</td>
+<td>152</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">30</td>
+<td>2023-06-06</td>
+<td>38787.87</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-06-06</td>
+<td>2023</td>
+<td>157</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">31</td>
+<td>2023-06-11</td>
+<td>38801.94</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-06-11</td>
+<td>2023</td>
+<td>162</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">32</td>
+<td>2023-06-16</td>
+<td>38818.56</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-06-16</td>
+<td>2023</td>
+<td>167</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">33</td>
+<td>2023-06-21</td>
+<td>38849.41</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-06-21</td>
+<td>2023</td>
+<td>172</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">34</td>
+<td>2023-06-26</td>
+<td>38905.84</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-06-26</td>
+<td>2023</td>
+<td>177</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">35</td>
+<td>2023-07-01</td>
+<td>38940.95</td>
+<td>S2 MNDWI 2023</td>
+<td>2023-07-01</td>
+<td>2023</td>
+<td>182</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2023-01-19</td>
+<td>264.82</td>
+<td>S1 VV 2023</td>
+<td>2023-01-19</td>
+<td>2023</td>
+<td>19</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2023-01-24</td>
+<td>471.44</td>
+<td>S1 VV 2023</td>
+<td>2023-01-24</td>
+<td>2023</td>
+<td>24</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2023-01-31</td>
+<td>1302.49</td>
+<td>S1 VV 2023</td>
+<td>2023-01-31</td>
+<td>2023</td>
+<td>31</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2023-02-05</td>
+<td>2117.56</td>
+<td>S1 VV 2023</td>
+<td>2023-02-05</td>
+<td>2023</td>
+<td>36</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2023-02-12</td>
+<td>3942.95</td>
+<td>S1 VV 2023</td>
+<td>2023-02-12</td>
+<td>2023</td>
+<td>43</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>2023-02-17</td>
+<td>5340.73</td>
+<td>S1 VV 2023</td>
+<td>2023-02-17</td>
+<td>2023</td>
+<td>48</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>2023-02-24</td>
+<td>7890.21</td>
+<td>S1 VV 2023</td>
+<td>2023-02-24</td>
+<td>2023</td>
+<td>55</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>2023-03-01</td>
+<td>10029.83</td>
+<td>S1 VV 2023</td>
+<td>2023-03-01</td>
+<td>2023</td>
+<td>60</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>2023-03-08</td>
+<td>12955.54</td>
+<td>S1 VV 2023</td>
+<td>2023-03-08</td>
+<td>2023</td>
+<td>67</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>2023-03-13</td>
+<td>15472.40</td>
+<td>S1 VV 2023</td>
+<td>2023-03-13</td>
+<td>2023</td>
+<td>72</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>2023-03-20</td>
+<td>18592.86</td>
+<td>S1 VV 2023</td>
+<td>2023-03-20</td>
+<td>2023</td>
+<td>79</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">11</td>
+<td>2023-03-25</td>
+<td>22021.46</td>
+<td>S1 VV 2023</td>
+<td>2023-03-25</td>
+<td>2023</td>
+<td>84</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12</td>
+<td>2023-04-01</td>
+<td>25441.34</td>
+<td>S1 VV 2023</td>
+<td>2023-04-01</td>
+<td>2023</td>
+<td>91</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">13</td>
+<td>2023-04-06</td>
+<td>27960.45</td>
+<td>S1 VV 2023</td>
+<td>2023-04-06</td>
+<td>2023</td>
+<td>96</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">14</td>
+<td>2023-04-13</td>
+<td>30313.32</td>
+<td>S1 VV 2023</td>
+<td>2023-04-13</td>
+<td>2023</td>
+<td>103</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">15</td>
+<td>2023-04-18</td>
+<td>31993.57</td>
+<td>S1 VV 2023</td>
+<td>2023-04-18</td>
+<td>2023</td>
+<td>108</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16</td>
+<td>2023-04-25</td>
+<td>33616.19</td>
+<td>S1 VV 2023</td>
+<td>2023-04-25</td>
+<td>2023</td>
+<td>115</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17</td>
+<td>2023-04-30</td>
+<td>34936.92</td>
+<td>S1 VV 2023</td>
+<td>2023-04-30</td>
+<td>2023</td>
+<td>120</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">18</td>
+<td>2023-05-07</td>
+<td>36431.93</td>
+<td>S1 VV 2023</td>
+<td>2023-05-07</td>
+<td>2023</td>
+<td>127</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">19</td>
+<td>2023-05-12</td>
+<td>37691.08</td>
+<td>S1 VV 2023</td>
+<td>2023-05-12</td>
+<td>2023</td>
+<td>132</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20</td>
+<td>2023-05-24</td>
+<td>38916.36</td>
+<td>S1 VV 2023</td>
+<td>2023-05-24</td>
+<td>2023</td>
+<td>144</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">21</td>
+<td>2023-05-31</td>
+<td>40343.00</td>
+<td>S1 VV 2023</td>
+<td>2023-05-31</td>
+<td>2023</td>
+<td>151</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2023-01-19</td>
+<td>260.10</td>
+<td>S1 VH 2023</td>
+<td>2023-01-19</td>
+<td>2023</td>
+<td>19</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2023-01-24</td>
+<td>462.26</td>
+<td>S1 VH 2023</td>
+<td>2023-01-24</td>
+<td>2023</td>
+<td>24</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2023-01-31</td>
+<td>1398.09</td>
+<td>S1 VH 2023</td>
+<td>2023-01-31</td>
+<td>2023</td>
+<td>31</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2023-02-05</td>
+<td>2115.30</td>
+<td>S1 VH 2023</td>
+<td>2023-02-05</td>
+<td>2023</td>
+<td>36</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2023-02-12</td>
+<td>3924.91</td>
+<td>S1 VH 2023</td>
+<td>2023-02-12</td>
+<td>2023</td>
+<td>43</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>2023-02-17</td>
+<td>5038.06</td>
+<td>S1 VH 2023</td>
+<td>2023-02-17</td>
+<td>2023</td>
+<td>48</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>2023-02-24</td>
+<td>7102.99</td>
+<td>S1 VH 2023</td>
+<td>2023-02-24</td>
+<td>2023</td>
+<td>55</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>2023-03-01</td>
+<td>8487.15</td>
+<td>S1 VH 2023</td>
+<td>2023-03-01</td>
+<td>2023</td>
+<td>60</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>2023-03-08</td>
+<td>10504.21</td>
+<td>S1 VH 2023</td>
+<td>2023-03-08</td>
+<td>2023</td>
+<td>67</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>2023-03-13</td>
+<td>12169.24</td>
+<td>S1 VH 2023</td>
+<td>2023-03-13</td>
+<td>2023</td>
+<td>72</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>2023-03-20</td>
+<td>14474.11</td>
+<td>S1 VH 2023</td>
+<td>2023-03-20</td>
+<td>2023</td>
+<td>79</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">11</td>
+<td>2023-03-25</td>
+<td>16818.28</td>
+<td>S1 VH 2023</td>
+<td>2023-03-25</td>
+<td>2023</td>
+<td>84</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12</td>
+<td>2023-04-01</td>
+<td>19000.89</td>
+<td>S1 VH 2023</td>
+<td>2023-04-01</td>
+<td>2023</td>
+<td>91</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">13</td>
+<td>2023-04-06</td>
+<td>20966.48</td>
+<td>S1 VH 2023</td>
+<td>2023-04-06</td>
+<td>2023</td>
+<td>96</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">14</td>
+<td>2023-04-13</td>
+<td>22866.63</td>
+<td>S1 VH 2023</td>
+<td>2023-04-13</td>
+<td>2023</td>
+<td>103</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">15</td>
+<td>2023-04-18</td>
+<td>24390.12</td>
+<td>S1 VH 2023</td>
+<td>2023-04-18</td>
+<td>2023</td>
+<td>108</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16</td>
+<td>2023-04-25</td>
+<td>25790.26</td>
+<td>S1 VH 2023</td>
+<td>2023-04-25</td>
+<td>2023</td>
+<td>115</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17</td>
+<td>2023-04-30</td>
+<td>27107.75</td>
+<td>S1 VH 2023</td>
+<td>2023-04-30</td>
+<td>2023</td>
+<td>120</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">18</td>
+<td>2023-05-07</td>
+<td>28356.70</td>
+<td>S1 VH 2023</td>
+<td>2023-05-07</td>
+<td>2023</td>
+<td>127</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">19</td>
+<td>2023-05-12</td>
+<td>29563.77</td>
+<td>S1 VH 2023</td>
+<td>2023-05-12</td>
+<td>2023</td>
+<td>132</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20</td>
+<td>2023-05-24</td>
+<td>30705.87</td>
+<td>S1 VH 2023</td>
+<td>2023-05-24</td>
+<td>2023</td>
+<td>144</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">21</td>
+<td>2023-05-31</td>
+<td>31803.72</td>
+<td>S1 VH 2023</td>
+<td>2023-05-31</td>
+<td>2023</td>
+<td>151</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2023-01-04</td>
+<td>0.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-01-04</td>
+<td>2023</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2023-01-04</td>
+<td>0.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-01-04</td>
+<td>2023</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2023-01-10</td>
+<td>0.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-01-10</td>
+<td>2023</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2023-01-10</td>
+<td>0.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-01-10</td>
+<td>2023</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2023-01-17</td>
+<td>0.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-01-17</td>
+<td>2023</td>
+<td>17</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>2023-01-17</td>
+<td>0.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-01-17</td>
+<td>2023</td>
+<td>17</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>2023-01-24</td>
+<td>3791.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-01-24</td>
+<td>2023</td>
+<td>24</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>2023-01-24</td>
+<td>83.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-01-24</td>
+<td>2023</td>
+<td>24</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>2023-01-31</td>
+<td>6169.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-01-31</td>
+<td>2023</td>
+<td>31</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>2023-01-31</td>
+<td>436.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-01-31</td>
+<td>2023</td>
+<td>31</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>2023-02-08</td>
+<td>8463.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-02-08</td>
+<td>2023</td>
+<td>39</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">11</td>
+<td>2023-02-08</td>
+<td>1058.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-02-08</td>
+<td>2023</td>
+<td>39</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12</td>
+<td>2023-02-15</td>
+<td>10548.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-02-15</td>
+<td>2023</td>
+<td>46</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">13</td>
+<td>2023-02-15</td>
+<td>2922.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-02-15</td>
+<td>2023</td>
+<td>46</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">14</td>
+<td>2023-02-21</td>
+<td>14356.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-02-21</td>
+<td>2023</td>
+<td>52</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">15</td>
+<td>2023-02-21</td>
+<td>5697.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-02-21</td>
+<td>2023</td>
+<td>52</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16</td>
+<td>2023-03-07</td>
+<td>20450.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-03-07</td>
+<td>2023</td>
+<td>66</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17</td>
+<td>2023-03-07</td>
+<td>11118.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-03-07</td>
+<td>2023</td>
+<td>66</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">18</td>
+<td>2023-03-15</td>
+<td>24876.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-03-15</td>
+<td>2023</td>
+<td>74</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">19</td>
+<td>2023-03-15</td>
+<td>14395.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-03-15</td>
+<td>2023</td>
+<td>74</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20</td>
+<td>2023-03-22</td>
+<td>31009.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-03-22</td>
+<td>2023</td>
+<td>81</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">21</td>
+<td>2023-03-22</td>
+<td>22973.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-03-22</td>
+<td>2023</td>
+<td>81</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">22</td>
+<td>2023-03-28</td>
+<td>34650.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-03-28</td>
+<td>2023</td>
+<td>87</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">23</td>
+<td>2023-03-28</td>
+<td>28942.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-03-28</td>
+<td>2023</td>
+<td>87</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">24</td>
+<td>2023-04-05</td>
+<td>35586.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-04-05</td>
+<td>2023</td>
+<td>95</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">25</td>
+<td>2023-04-05</td>
+<td>31105.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-04-05</td>
+<td>2023</td>
+<td>95</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26</td>
+<td>2023-04-11</td>
+<td>37660.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-04-11</td>
+<td>2023</td>
+<td>101</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">27</td>
+<td>2023-04-11</td>
+<td>35265.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-04-11</td>
+<td>2023</td>
+<td>101</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">28</td>
+<td>2023-04-18</td>
+<td>38694.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-04-18</td>
+<td>2023</td>
+<td>108</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">29</td>
+<td>2023-04-18</td>
+<td>37080.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-04-18</td>
+<td>2023</td>
+<td>108</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">30</td>
+<td>2023-04-25</td>
+<td>38933.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-04-25</td>
+<td>2023</td>
+<td>115</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">31</td>
+<td>2023-04-25</td>
+<td>38571.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-04-25</td>
+<td>2023</td>
+<td>115</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">32</td>
+<td>2023-05-02</td>
+<td>39230.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-05-02</td>
+<td>2023</td>
+<td>122</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">33</td>
+<td>2023-05-02</td>
+<td>38992.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-05-02</td>
+<td>2023</td>
+<td>122</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">34</td>
+<td>2023-05-09</td>
+<td>39665.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-05-09</td>
+<td>2023</td>
+<td>129</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">35</td>
+<td>2023-05-09</td>
+<td>39505.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-05-09</td>
+<td>2023</td>
+<td>129</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">36</td>
+<td>2023-05-16</td>
+<td>39757.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-05-16</td>
+<td>2023</td>
+<td>136</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">37</td>
+<td>2023-05-16</td>
+<td>39628.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-05-16</td>
+<td>2023</td>
+<td>136</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">38</td>
+<td>2023-05-13</td>
+<td>39757.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-05-13</td>
+<td>2023</td>
+<td>133</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">39</td>
+<td>2023-05-13</td>
+<td>39857.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-05-13</td>
+<td>2023</td>
+<td>133</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">40</td>
+<td>2023-06-06</td>
+<td>39757.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-06-06</td>
+<td>2023</td>
+<td>157</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">41</td>
+<td>2023-06-06</td>
+<td>39857.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-06-06</td>
+<td>2023</td>
+<td>157</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">42</td>
+<td>2023-06-13</td>
+<td>39757.00</td>
+<td>SAED prepared area 2023</td>
+<td>2023-06-13</td>
+<td>2023</td>
+<td>164</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">43</td>
+<td>2023-06-13</td>
+<td>39857.00</td>
+<td>SAED planted area 2023</td>
+<td>2023-06-13</td>
+<td>2023</td>
+<td>164</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2024-01-12</td>
+<td>618.46</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-01-12</td>
+<td>2024</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2024-01-17</td>
+<td>689.53</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-01-17</td>
+<td>2024</td>
+<td>17</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2024-01-22</td>
+<td>1260.60</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-01-22</td>
+<td>2024</td>
+<td>22</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2024-01-27</td>
+<td>1479.62</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-01-27</td>
+<td>2024</td>
+<td>27</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2024-02-01</td>
+<td>1673.02</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-02-01</td>
+<td>2024</td>
+<td>32</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>2024-02-06</td>
+<td>2670.23</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-02-06</td>
+<td>2024</td>
+<td>37</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>2024-02-11</td>
+<td>5552.47</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-02-11</td>
+<td>2024</td>
+<td>42</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>2024-02-16</td>
+<td>7479.15</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-02-16</td>
+<td>2024</td>
+<td>47</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>2024-02-21</td>
+<td>7939.74</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-02-21</td>
+<td>2024</td>
+<td>52</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>2024-02-26</td>
+<td>11471.69</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-02-26</td>
+<td>2024</td>
+<td>57</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>2024-03-02</td>
+<td>13511.68</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-03-02</td>
+<td>2024</td>
+<td>62</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">11</td>
+<td>2024-03-07</td>
+<td>17830.79</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-03-07</td>
+<td>2024</td>
+<td>67</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12</td>
+<td>2024-03-12</td>
+<td>19712.43</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-03-12</td>
+<td>2024</td>
+<td>72</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">13</td>
+<td>2024-03-17</td>
+<td>20984.70</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-03-17</td>
+<td>2024</td>
+<td>77</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">14</td>
+<td>2024-03-22</td>
+<td>21372.69</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-03-22</td>
+<td>2024</td>
+<td>82</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">15</td>
+<td>2024-03-27</td>
+<td>21778.42</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-03-27</td>
+<td>2024</td>
+<td>87</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16</td>
+<td>2024-04-01</td>
+<td>22616.00</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-04-01</td>
+<td>2024</td>
+<td>92</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17</td>
+<td>2024-04-06</td>
+<td>24033.40</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-04-06</td>
+<td>2024</td>
+<td>97</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">18</td>
+<td>2024-04-11</td>
+<td>24196.84</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-04-11</td>
+<td>2024</td>
+<td>102</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">19</td>
+<td>2024-04-16</td>
+<td>24259.49</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-04-16</td>
+<td>2024</td>
+<td>107</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20</td>
+<td>2024-04-21</td>
+<td>24812.09</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-04-21</td>
+<td>2024</td>
+<td>112</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">21</td>
+<td>2024-04-26</td>
+<td>24812.69</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-04-26</td>
+<td>2024</td>
+<td>117</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">22</td>
+<td>2024-05-01</td>
+<td>24872.08</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-05-01</td>
+<td>2024</td>
+<td>122</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">23</td>
+<td>2024-05-06</td>
+<td>25130.41</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-05-06</td>
+<td>2024</td>
+<td>127</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">24</td>
+<td>2024-05-11</td>
+<td>25194.67</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-05-11</td>
+<td>2024</td>
+<td>132</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">25</td>
+<td>2024-05-16</td>
+<td>25575.17</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-05-16</td>
+<td>2024</td>
+<td>137</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26</td>
+<td>2024-05-21</td>
+<td>25655.38</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-05-21</td>
+<td>2024</td>
+<td>142</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">27</td>
+<td>2024-05-26</td>
+<td>25741.40</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-05-26</td>
+<td>2024</td>
+<td>147</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">28</td>
+<td>2024-05-31</td>
+<td>25836.58</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-05-31</td>
+<td>2024</td>
+<td>152</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">29</td>
+<td>2024-06-05</td>
+<td>26003.64</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-06-05</td>
+<td>2024</td>
+<td>157</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">30</td>
+<td>2024-06-10</td>
+<td>26004.66</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-06-10</td>
+<td>2024</td>
+<td>162</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">31</td>
+<td>2024-06-15</td>
+<td>26027.04</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-06-15</td>
+<td>2024</td>
+<td>167</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">32</td>
+<td>2024-06-20</td>
+<td>26050.29</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-06-20</td>
+<td>2024</td>
+<td>172</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">33</td>
+<td>2024-06-25</td>
+<td>26167.00</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-06-25</td>
+<td>2024</td>
+<td>177</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">34</td>
+<td>2024-06-30</td>
+<td>26245.02</td>
+<td>S2 MNDWI 2024</td>
+<td>2024-06-30</td>
+<td>2024</td>
+<td>182</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2024-01-14</td>
+<td>106.99</td>
+<td>S1 VV 2024</td>
+<td>2024-01-14</td>
+<td>2024</td>
+<td>14</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2024-01-19</td>
+<td>352.10</td>
+<td>S1 VV 2024</td>
+<td>2024-01-19</td>
+<td>2024</td>
+<td>19</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2024-01-26</td>
+<td>539.86</td>
+<td>S1 VV 2024</td>
+<td>2024-01-26</td>
+<td>2024</td>
+<td>26</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2024-01-31</td>
+<td>1151.80</td>
+<td>S1 VV 2024</td>
+<td>2024-01-31</td>
+<td>2024</td>
+<td>31</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2024-02-12</td>
+<td>2379.84</td>
+<td>S1 VV 2024</td>
+<td>2024-02-12</td>
+<td>2024</td>
+<td>43</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">5</td>
+<td>2024-02-19</td>
+<td>2995.77</td>
+<td>S1 VV 2024</td>
+<td>2024-02-19</td>
+<td>2024</td>
+<td>50</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">6</td>
+<td>2024-02-24</td>
+<td>4954.35</td>
+<td>S1 VV 2024</td>
+<td>2024-02-24</td>
+<td>2024</td>
+<td>55</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">7</td>
+<td>2024-03-02</td>
+<td>6021.96</td>
+<td>S1 VV 2024</td>
+<td>2024-03-02</td>
+<td>2024</td>
+<td>62</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">8</td>
+<td>2024-03-07</td>
+<td>8596.86</td>
+<td>S1 VV 2024</td>
+<td>2024-03-07</td>
+<td>2024</td>
+<td>67</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">9</td>
+<td>2024-03-14</td>
+<td>9835.96</td>
+<td>S1 VV 2024</td>
+<td>2024-03-14</td>
+<td>2024</td>
+<td>74</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">10</td>
+<td>2024-03-19</td>
+<td>11872.63</td>
+<td>S1 VV 2024</td>
+<td>2024-03-19</td>
+<td>2024</td>
+<td>79</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">11</td>
+<td>2024-03-26</td>
+<td>12929.51</td>
+<td>S1 VV 2024</td>
+<td>2024-03-26</td>
+<td>2024</td>
+<td>86</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">12</td>
+<td>2024-03-31</td>
+<td>14555.43</td>
+<td>S1 VV 2024</td>
+<td>2024-03-31</td>
+<td>2024</td>
+<td>91</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">13</td>
+<td>2024-04-07</td>
+<td>15454.54</td>
+<td>S1 VV 2024</td>
+<td>2024-04-07</td>
+<td>2024</td>
+<td>98</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">14</td>
+<td>2024-04-12</td>
+<td>16902.79</td>
+<td>S1 VV 2024</td>
+<td>2024-04-12</td>
+<td>2024</td>
+<td>103</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">15</td>
+<td>2024-04-19</td>
+<td>17558.07</td>
+<td>S1 VV 2024</td>
+<td>2024-04-19</td>
+<td>2024</td>
+<td>110</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">16</td>
+<td>2024-04-24</td>
+<td>18862.38</td>
+<td>S1 VV 2024</td>
+<td>2024-04-24</td>
+<td>2024</td>
+<td>115</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">17</td>
+<td>2024-05-01</td>
+<td>19541.53</td>
+<td>S1 VV 2024</td>
+<td>2024-05-01</td>
+<td>2024</td>
+<td>122</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">18</td>
+<td>2024-05-06</td>
+<td>20924.40</td>
+<td>S1 VV 2024</td>
+<td>2024-05-06</td>
+<td>2024</td>
+<td>127</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">19</td>
+<td>2024-05-18</td>
+<td>22278.01</td>
+<td>S1 VV 2024</td>
+<td>2024-05-18</td>
+<td>2024</td>
+<td>139</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">20</td>
+<td>2024-05-25</td>
+<td>22902.51</td>
+<td>S1 VV 2024</td>
+<td>2024-05-25</td>
+<td>2024</td>
+<td>146</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">21</td>
+<td>2024-05-30</td>
+<td>24243.12</td>
+<td>S1 VV 2024</td>
+<td>2024-05-30</td>
+<td>2024</td>
+<td>151</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2024-01-14</td>
+<td>162.13</td>
+<td>S1 VH 2024</td>
+<td>2024-01-14</td>
+<td>2024</td>
+<td>14</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2024-01-19</td>
+<td>425.58</td>
+<td>S1 VH 2024</td>
+<td>2024-01-19</td>
+<td>2024</td>
+<td>19</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2024-01-26</td>
+<td>844.81</td>
+<td>S1 VH 2024</td>
+<td>2024-01-26</td>
+<td>2024</td>
+<td>26</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2024-01-31</td>
+<td>1438.56</td>
+<td>S1 VH 2024</td>
+<td>2024-01-31</td>
+<td>2024</td>
+<td>31</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2024-02-12</td>
+<td>2380.67</td>
+<td>S1 VH 2024</td>
+<td>2024-02-12</td>
+<td>2024</td>
+<td>43</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">5</td>
+<td>2024-02-19</td>
+<td>3555.42</td>
+<td>S1 VH 2024</td>
+<td>2024-02-19</td>
+<td>2024</td>
+<td>50</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">6</td>
+<td>2024-02-24</td>
+<td>4841.87</td>
+<td>S1 VH 2024</td>
+<td>2024-02-24</td>
+<td>2024</td>
+<td>55</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">7</td>
+<td>2024-03-02</td>
+<td>6521.18</td>
+<td>S1 VH 2024</td>
+<td>2024-03-02</td>
+<td>2024</td>
+<td>62</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">8</td>
+<td>2024-03-07</td>
+<td>8286.28</td>
+<td>S1 VH 2024</td>
+<td>2024-03-07</td>
+<td>2024</td>
+<td>67</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">9</td>
+<td>2024-03-14</td>
+<td>9943.31</td>
+<td>S1 VH 2024</td>
+<td>2024-03-14</td>
+<td>2024</td>
+<td>74</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">10</td>
+<td>2024-03-19</td>
+<td>11556.28</td>
+<td>S1 VH 2024</td>
+<td>2024-03-19</td>
+<td>2024</td>
+<td>79</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">11</td>
+<td>2024-03-26</td>
+<td>13053.40</td>
+<td>S1 VH 2024</td>
+<td>2024-03-26</td>
+<td>2024</td>
+<td>86</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">12</td>
+<td>2024-03-31</td>
+<td>14440.46</td>
+<td>S1 VH 2024</td>
+<td>2024-03-31</td>
+<td>2024</td>
+<td>91</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">13</td>
+<td>2024-04-07</td>
+<td>15834.43</td>
+<td>S1 VH 2024</td>
+<td>2024-04-07</td>
+<td>2024</td>
+<td>98</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">14</td>
+<td>2024-04-12</td>
+<td>17147.71</td>
+<td>S1 VH 2024</td>
+<td>2024-04-12</td>
+<td>2024</td>
+<td>103</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">15</td>
+<td>2024-04-19</td>
+<td>18203.91</td>
+<td>S1 VH 2024</td>
+<td>2024-04-19</td>
+<td>2024</td>
+<td>110</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">16</td>
+<td>2024-04-24</td>
+<td>19476.34</td>
+<td>S1 VH 2024</td>
+<td>2024-04-24</td>
+<td>2024</td>
+<td>115</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">17</td>
+<td>2024-05-01</td>
+<td>20507.44</td>
+<td>S1 VH 2024</td>
+<td>2024-05-01</td>
+<td>2024</td>
+<td>122</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">18</td>
+<td>2024-05-06</td>
+<td>21789.96</td>
+<td>S1 VH 2024</td>
+<td>2024-05-06</td>
+<td>2024</td>
+<td>127</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">19</td>
+<td>2024-05-18</td>
+<td>22997.77</td>
+<td>S1 VH 2024</td>
+<td>2024-05-18</td>
+<td>2024</td>
+<td>139</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">20</td>
+<td>2024-05-25</td>
+<td>23997.88</td>
+<td>S1 VH 2024</td>
+<td>2024-05-25</td>
+<td>2024</td>
+<td>146</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">21</td>
+<td>2024-05-30</td>
+<td>25244.18</td>
+<td>S1 VH 2024</td>
+<td>2024-05-30</td>
+<td>2024</td>
+<td>151</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">44</td>
+<td>2024-01-02</td>
+<td>0.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-01-02</td>
+<td>2024</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">45</td>
+<td>2024-01-02</td>
+<td>0.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-01-02</td>
+<td>2024</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">46</td>
+<td>2024-01-09</td>
+<td>0.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-01-09</td>
+<td>2024</td>
+<td>9</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">47</td>
+<td>2024-01-09</td>
+<td>0.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-01-09</td>
+<td>2024</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">48</td>
+<td>2024-01-16</td>
+<td>0.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-01-16</td>
+<td>2024</td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">49</td>
+<td>2024-01-16</td>
+<td>0.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-01-16</td>
+<td>2024</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50</td>
+<td>2024-01-23</td>
+<td>102.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-01-23</td>
+<td>2024</td>
+<td>23</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">51</td>
+<td>2024-01-23</td>
+<td>2903.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-01-23</td>
+<td>2024</td>
+<td>23</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">52</td>
+<td>2024-01-30</td>
+<td>533.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-01-30</td>
+<td>2024</td>
+<td>30</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">53</td>
+<td>2024-01-30</td>
+<td>4758.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-01-30</td>
+<td>2024</td>
+<td>30</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">54</td>
+<td>2024-02-13</td>
+<td>2113.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-02-13</td>
+<td>2024</td>
+<td>44</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">55</td>
+<td>2024-02-13</td>
+<td>9434.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-02-13</td>
+<td>2024</td>
+<td>44</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">56</td>
+<td>2024-02-20</td>
+<td>4212.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-02-20</td>
+<td>2024</td>
+<td>51</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">57</td>
+<td>2024-02-20</td>
+<td>11751.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-02-20</td>
+<td>2024</td>
+<td>51</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">58</td>
+<td>2024-03-05</td>
+<td>10907.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-03-05</td>
+<td>2024</td>
+<td>65</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">59</td>
+<td>2024-03-05</td>
+<td>18796.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-03-05</td>
+<td>2024</td>
+<td>65</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">60</td>
+<td>2024-03-12</td>
+<td>15722.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-03-12</td>
+<td>2024</td>
+<td>72</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">61</td>
+<td>2024-03-12</td>
+<td>20661.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-03-12</td>
+<td>2024</td>
+<td>72</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">62</td>
+<td>2024-03-19</td>
+<td>18239.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-03-19</td>
+<td>2024</td>
+<td>79</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">63</td>
+<td>2024-03-19</td>
+<td>21805.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-03-19</td>
+<td>2024</td>
+<td>79</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">64</td>
+<td>2024-03-26</td>
+<td>20427.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-03-26</td>
+<td>2024</td>
+<td>86</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">65</td>
+<td>2024-03-26</td>
+<td>23937.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-03-26</td>
+<td>2024</td>
+<td>86</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">66</td>
+<td>2024-04-02</td>
+<td>23028.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-04-02</td>
+<td>2024</td>
+<td>93</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">67</td>
+<td>2024-04-02</td>
+<td>25418.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-04-02</td>
+<td>2024</td>
+<td>93</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">68</td>
+<td>2024-04-09</td>
+<td>25313.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-04-09</td>
+<td>2024</td>
+<td>100</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">69</td>
+<td>2024-04-09</td>
+<td>26301.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-04-09</td>
+<td>2024</td>
+<td>100</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">70</td>
+<td>2024-04-16</td>
+<td>25313.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-04-16</td>
+<td>2024</td>
+<td>107</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">71</td>
+<td>2024-04-16</td>
+<td>26301.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-04-16</td>
+<td>2024</td>
+<td>107</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">72</td>
+<td>2024-04-16</td>
+<td>26301.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-04-16</td>
+<td>2024</td>
+<td>107</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">73</td>
+<td>2024-04-16</td>
+<td>25313.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-04-16</td>
+<td>2024</td>
+<td>107</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">74</td>
+<td>2024-04-23</td>
+<td>26538.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-04-23</td>
+<td>2024</td>
+<td>114</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75</td>
+<td>2024-04-23</td>
+<td>25950.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-04-23</td>
+<td>2024</td>
+<td>114</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">76</td>
+<td>2024-04-30</td>
+<td>26900.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-04-30</td>
+<td>2024</td>
+<td>121</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">77</td>
+<td>2024-04-30</td>
+<td>26558.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-04-30</td>
+<td>2024</td>
+<td>121</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">78</td>
+<td>2024-05-07</td>
+<td>26900.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-05-07</td>
+<td>2024</td>
+<td>128</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">79</td>
+<td>2024-05-07</td>
+<td>26618.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-05-07</td>
+<td>2024</td>
+<td>128</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">80</td>
+<td>2024-05-14</td>
+<td>26900.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-05-14</td>
+<td>2024</td>
+<td>135</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">81</td>
+<td>2024-05-14</td>
+<td>26618.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-05-14</td>
+<td>2024</td>
+<td>135</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">82</td>
+<td>2024-05-21</td>
+<td>26900.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-05-21</td>
+<td>2024</td>
+<td>142</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">83</td>
+<td>2024-05-21</td>
+<td>26618.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-05-21</td>
+<td>2024</td>
+<td>142</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">84</td>
+<td>2024-05-28</td>
+<td>26900.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-05-28</td>
+<td>2024</td>
+<td>149</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">85</td>
+<td>2024-05-28</td>
+<td>26618.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-05-28</td>
+<td>2024</td>
+<td>149</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">86</td>
+<td>2024-06-04</td>
+<td>26900.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-06-04</td>
+<td>2024</td>
+<td>156</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">87</td>
+<td>2024-06-04</td>
+<td>26618.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-06-04</td>
+<td>2024</td>
+<td>156</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">88</td>
+<td>2024-06-11</td>
+<td>26900.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-06-11</td>
+<td>2024</td>
+<td>163</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">89</td>
+<td>2024-06-11</td>
+<td>26618.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-06-11</td>
+<td>2024</td>
+<td>163</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">90</td>
+<td>2024-06-18</td>
+<td>26900.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-06-18</td>
+<td>2024</td>
+<td>170</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">91</td>
+<td>2024-06-18</td>
+<td>26618.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-06-18</td>
+<td>2024</td>
+<td>170</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">92</td>
+<td>2024-06-25</td>
+<td>26900.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-06-25</td>
+<td>2024</td>
+<td>177</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">93</td>
+<td>2024-06-25</td>
+<td>26618.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-06-25</td>
+<td>2024</td>
+<td>177</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">94</td>
+<td>2024-07-02</td>
+<td>26900.00</td>
+<td>SAED prepared area 2024</td>
+<td>2024-07-02</td>
+<td>2024</td>
+<td>184</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">95</td>
+<td>2024-07-02</td>
+<td>26618.00</td>
+<td>SAED planted area 2024</td>
+<td>2024-07-02</td>
+<td>2024</td>
+<td>184</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+b. Comparison the above output
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="justify">
+<p>The SAED forecast for 2024 predicts a decrease to 39,850 hectares under rice cultivation compared to 2023, when it was 41,000 hectares.</p>
+<p>Observation: - Both years show a gradual increase in flooded area from the start of the year, with a significant rise around the planting period (February 15th to March 15th). - Flooded Area (2023): Higher overall flooded area in 2023 compared to 2024. - The trend shows that most of the flooding and planting activities are concentrated around the designated planting period (February 15th to March 15th). - The S1 data in 2024 indicates a smaller extent of flooding activities compared to S2 and SAED data. - The S1 data aligns closely with the SAED prepared area data.</p>
+</div>
+</div>
+</div>
+<div id="be08949b" class="cell" data-execution_count="3">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Dagana_dhs_flooding_updates_files/figure-html/cell-4-output-1.png" width="1135" height="948" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="mapping-the-flooding-extend-in-dagana-in-2023-and-2024" class="level3">
+<h3 class="anchored" data-anchor-id="mapping-the-flooding-extend-in-dagana-in-2023-and-2024">2. Mapping the flooding extend in dagana in 2023 and 2024</h3>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+a. Risky analysis associated to flooding
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="justify">
+<p>The comparison of the flooding maps for 2023 and 2024 highlights the spatial and temporal variations in flooding risks within the Dagana region. These insights can guide better agricultural and flood management practices to mitigate risks and ensure timely planting.</p>
+<p>We utilize flooding date information to classify the plots that have experienced flooding and have been planted within the SAED window, which spans from February 15th to March 15th. Given that the latest image is from March 17th, plots are categorized as low risk if the flooding date falls on or before the 77th day of the year and as high risk if flooded/planted after day 77.</p>
+<section id="observations" class="level3">
+<h3 class="anchored" data-anchor-id="observations">Observations:</h3>
+<pre><code>- In both years, the majority of the area is marked in green, indicating low-risk plots.
+- There are notable differences in the distribution of red areas (high-risk plots) between the two years.
+- The 2024 map shows a higher concentration of red areas (high-risk plots) in the southern and central parts of the region, with scattered red areas in the northern part.
+- The 2023 map shows a different distribution pattern, with more red areas in the northern and central parts of the region.
+- The southern part of the 2023 map has fewer red areas compared to the 2024 map.
+- Fewer red areas suggest better alignment with the planting schedule, possibly due to more favorable conditions or better management.
+- More red areas indicate that many plots were either flooded or planted past the SAED window, suggesting potential delays due to various reasons, including delayed financing which affects access to labor and resources.
+- In summary, the 2024 flooding map shows a better overall flooding and planting situation with fewer high-risk (red) plots compared to 2023.</code></pre>
+<p>The differences in risk distribution between the two years can help in understanding the changing patterns of flooding and adjusting agricultural practices accordingly. Areas with consistent high-risk plots across years may need further investigation and potentially more robust flooding management strategies to avoid credit defaults and losses.</p>
+</section>
+</div>
+</div>
+</div>
+<div id="f40d0316" class="cell" data-execution_count="4">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Dagana_dhs_flooding_updates_files/figure-html/cell-5-output-1.png" width="1143" height="791" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Dagana_dhs_flooding_updates_files/figure-html/cell-5-output-2.png" width="1143" height="791" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+b. Spatial distribution of the maps
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="justify">
+<ul>
+<li>Flooding maps - We will show just the 2024 map that depicts the extent of the flooded rice area across the plots in the region, between January and 1st July.</li>
+<li>The spatial distribution of the estimated dates in the region.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="8decd097" class="cell" data-execution_count="5">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Dagana_dhs_flooding_updates_files/figure-html/cell-6-output-1.png" width="1324" height="880" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Dagana_dhs_flooding_updates_files/figure-html/cell-6-output-2.png" width="1324" height="880" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="estimated-flooding-dates-for-2023-and-2024-using-sentinel-2" class="level3">
+<h3 class="anchored" data-anchor-id="estimated-flooding-dates-for-2023-and-2024-using-sentinel-2">Estimated flooding dates for 2023 and 2024 using Sentinel 2</h3>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Frequency of flooding dates over the year,
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="justify">
+<p>This bar chart shows the frequency of flooding dates over the season, categorized by two different datasets: “rs_mndwi_data_2024” and “rs_mndwi_data_2023”.</p>
+<p>Observations:</p>
+<ul>
+<li>Flooding events appear to be concentrated primarily in the first 100 days of the year for both datasets.</li>
+<li>There are several peaks in flooding frequency for both datasets, indicating multiple significant flooding events or periods.</li>
+<li>The remote sensing data 2024 (blue bars) shows a higher frequency of flooding events compared to remotensing data 2023 (green bars), especially around days 50 to 75.</li>
+<li>Both datasets have similar patterns, but remotensing data 2024 has more consistent and higher frequency peaks.</li>
+<li>Days with notable flooding events include around days 10, 25, 50, 75, and 100. Both datasets show some flooding events on these days, but the frequency differs.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="ff53284c" class="cell" data-execution_count="6">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Dagana_dhs_flooding_updates_files/figure-html/cell-7-output-1.png" width="1138" height="756" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="next-steps" class="level3">
+<h3 class="anchored" data-anchor-id="next-steps">Next steps</h3>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+To do list
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="justify">
+<ol type="1">
+<li>Finalize the sentinel 1 workflow</li>
+<li>Fuse the sentinel 1 and 2 output for flooding timing estimates</li>
+<li>Compare the estimated flooding dates with field data from agCelerant.</li>
+<li>Adopt the fused workflow for harvest monitoring.</li>
+</ol>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<script src="Dagana_dhs_flooding_updates_files/libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

@@ -1,0 +1,665 @@
+---
+title: "Financial Instruments-FIS1"
+date: today
+date-format: long
+author: "Financial Instruments-ICRISAT"
+format:
+  html:
+  
+    page-layout: full
+    theme:
+          light: flatly
+          dark: darkly
+    toc: false
+    toc-depth: 3
+    toc-location: left
+    number-sections: false
+    smooth-scroll: true
+execute:
+    echo: false
+    warning: false
+    enable: true
+title-block-banner: true
+---
+
+```{=html}
+<style type="text/css">
+
+h1.title {
+  font-size: 20px;
+  color: White;
+  text-align: center;
+}
+h4.author { /* Header 4 - and the author and data headers use this too  */
+    font-size: 16px;
+  font-family: "Source Sans Pro Semibold", Times, serif;
+  color: Red;
+  text-align: center;
+}
+h4.date { /* Header 4 - and the author and data headers use this too  */
+  font-size: 16px;
+  font-family: "Source Sans Pro Semibold", Times, serif;
+  color: Red;
+  text-align: center;
+}
+
+.justify {
+  text-align: justify !important
+}
+
+</style>
+```
+
+
+------------------------------------------------------------------------
+
+::: {style="text-align:center"}
+<h2>Dagana dry hot season flooding detection analysis</h2>
+:::
+
+</br>
+
+### Overview
+::: {.justify}
+The agricultural sub-sector, particularly smallholder agriculture, is the focal point of the FIS, Local risk control service work stream. Inter-farm variability in management practices among small farms largely determines yield outcomes. Optimizing agronomic practices alone is insufficient for ensuring food security- significantly more inputs are required. The primary challenge lies within the agricultural value chain, particularly concerning access to credit for small farmers, which financial service providers perceive as risky and costly. The objective of this work stream is to develop services that leverage Earth Observation (EO) to mitigate risk perception, thereby facilitating investments in agriculture. These services aim to reduce the costs associated with quantifying risk and value at risk while enabling access to innovative financing options like climate finance. Emphasis will be placed on interventions bridging the agriculture and environmental sectors, particularly within the Agriculture and Food Security and Ecosystem and Carbon Management thematic areas in the SERVIR context. EO-based solutions can revolutionize risk management in agriculture, addressing challenges such as delays in planting due to late credit and input arrivals, which affect harvest quality, sales prices, and overall risk in the agricultural value chain. 
+:::
+
+### FIS1.6: Fusion of Sentinel 1 and Sentinel 2 for paddy flooding timing estimates in the Dagana
+::: { .callout-note}
+
+::: {.justify}
+We demonstrate the flooding activities and the impact of credit access. 
+
+A brief summary of the analysis:
+
+    - Flooding timelines-analyze the flooding data over time to identify trends and patterns.
+        - Create a line chart or area chart to visualize the flooding area or number of affected locations over the given time period.
+        - Highlight significant events or peak flooding periods..
+    - Flooding Progression: Analyze how the flooding progressed over time in different locations.
+        - Create a heatmap or a series of maps to visualize the spatial and temporal distribution of flooding.
+        - Identify areas where flooding started early or persisted for a longer duration.
+    - Comparison with Historical Data-
+        -  Use historical (previous years) flooding data, compare the current season flooding activities.
+        - Create a bar chart or line chart to show the comparison and highlight any significant deviations.
+        - Provide insights into whether the current flooding is above or below historical levels.
+    - Impact Analysis on access to credit.
+        - Assess the potential impact of early access to credit on flooding on various locations.
+        - Analyze the data in relation to land use, SRI practices, population density, or critical infrastructure.
+        - Create a risk map or categorize localities into different risk levels.
+        - Provide recommendations for late flooding/planting mitigation measures or preparedness planning.
+
+*Variable included*
+
+    - crop_name: Rice
+    - Region: Dagana, Senegal
+    - season_name:  Dry hot season 
+    - planting_year: 2024, 2023
+    - Estimated flooding dates
+
+:::
+:::
+
+```{python}
+import pandas as pd
+from urllib.error import URLError
+import numpy as np
+import matplotlib.pyplot as plt
+import plotly.express as px
+import plotly.figure_factory as ff
+import plotly.graph_objects as go
+import seaborn as sns
+import geopandas as gpd
+import fiona
+import os
+import re
+import glob
+import folium
+import rasterio
+import rasterio as rio
+import matplotlib.dates as md
+from datetime import datetime
+from dateutil import parser
+from shapely import wkt
+from shapely.geometry import Point, LineString, Polygon, box
+from matplotlib.dates import DateFormatter, DayLocator
+from matplotlib.colors import ListedColormap, BoundaryNorm
+from rasterio.plot import show
+from IPython.display import display, Markdown, HTML
+from folium.plugins import MarkerCluster
+from shapely.wkt import loads
+from matplotlib.patches import Patch
+import json
+import ee
+from rasterio.warp import calculate_default_transform, reproject, Resampling
+
+```
+
+### Data availability
+:::{.callout-note}
+::: {.justify}
+Google Earth Engine hosts an extensive archive of Sentinel-1 and Sentinel-2 data, encompassing dual-polarized and interferometric wide-swath images for Sentinel-1, and multispectral imagery in the visible and infrared spectrum for Sentinel-2. This diverse dataset is available at various spatial and temporal resolutions,
+making it suitable for a wide range of applications.
+:::
+:::
+
+:::{.justify}
+#### **Workflow description**
+::: {.callout-tip}
+#### Sentinel 2
+
+1. Data acquistion: 
+    - Sentinel-2’s multispectral capabilities are well-suited for land cover and vegetation
+    analysis. With its wide coverage and high spatial resolution, it provides valuable information for monitoring changes in land cover and vegetation growth
+    - We use area of interest boundaries to access through Google Earth Engine: RGB, Normalized Difference Water Index(NDWI), Modified Normalized Difference Water Index (MNDWI), Normalized Difference Vegetation Index (NDVI) and the mask cloud layer depending on your current task. 
+    - Clouds are identified from the S2 cloud probability dataset (s2cloudless) and downloaded as cloud images. You can set the probability/percentage of cloud presence in all images between 0 and 100. 
+    - s2cloudless is a machine learning algorithm for computing cloud masks on Sentinel-2 imagery. There is a pre-computed cloud masks for the entire Sentinel-2 archive via the Sentinel Hub service. It assigns each pixel in an image a cloud probability solely based on the pixel’s ten Sentinel-2 band values.
+    - MNDWI is calculated using the Green band mid infrared bands((Green - SWIR (band 11) ) / (Green + SWIR (band 11))). 
+    - One advantage of MNDWI is that it diminishes built-up areas that are always confused as water bodies compared to NDWI.
+    - The major limitations of MNDWI: it easily misclassifies shadow and dark roads as water bodies.
+    - The water bodies appear as bright pixels while dryland appears dark pixels.
+    - In prepocessing the images before downloading, permanent water is excluded before gnerating the MNDWI tiff.
+
+2. Extracting the flooded areas: 
+    - Firstly, we generate the flooding map that shows the flooded areas extend.
+    - The MNDWI values range from -1≤x≤1 and we apply series of logical AND operations to the MNDWI tiff files to identify pixels that represent water bodies (x>0) and that have low cloud cover (y<40).
+    - The initial MNDWI TIFF file introduced into the workflow is important when extracting flooded areas. Initially, a working array is generated from the RGB TIFF file. Subsequently, using numpy array operations, update this working array with pixel values from the MNDWI TIFFs. Afterwards, assign a value, say 2, to all pixels in the working array where the corresponding pixel values in the first MNDWI TIFF are greater than 0 (indicating water pixels), effectively masking out all pixels where water is present.
+    - Subsequent MNDWI tiff files' water pixels are then accumulated through a logical process that first verifies if the pixel in the working array is already identified as part of water pixels. This step ensures that pixels flagged in previous iterations are not overwritten.
+    - The resulting image contains a value of 0 for all non-water pixels, and the day of year for each water pixel.
+    - Secondly, we extract the convert the water pixels into areas in hectares. Create a proportion of area flooded for each grid cell/plot/point within the area, using a reference RGB image and the shapefile.
+    - Create a dataframe from the proportion data under flooding for each date.
+
+3. Estimate the flooding dates
+    - The aim is to determine the date of the maximum flooding. 
+:::
+
+
+::: {.callout-tip}
+#### Sentinel 1
+1. Data acquistion: 
+
+    - Sentinel-1, operating in C-band, has proven to be a valuable asset for flood monitoring due to its unique capabilities. Its all-weather and day-and-night imaging capacity, coupled with the ability to penetrate through clouds and capture surface changes, makes it ideal for flood detection.
+    - To ensure data homogeneity, a meticulous filtering process was executed. This process encompassed the selection of data based on specific criteria, including instrument mode (’IW’ for Interferometric Wide Swath), orbit properties (’ASCENDING’ or ’DESCENDING’), and  transmitterreceiver polarizations (’Vertical-Vertical’ (’VV’) and ’Vertical-Horizontal’ (’VH’)). 
+    - Furthermore, the Sentinel-1 data was segregated into distinct polarizations for ’VV,’ ’VH,’ and ’VV/VH’ (ratio) images.
+    -  The VV band is a good indicator of structural characteristics, such as vegetation density and height, making it useful for crop monitoring. As vegetation matures and its density increases, the VV signal tends to decrease due to increased attenuation caused by the dense canopy.
+    - Conversely, the VH band is sensitive to surface roughness and moisture content. In the context of rice fields, the VH band can be valuable for flood mapping as it enables the identification of flooded areas. Water bodies, including flooded rice paddies, typically exhibit high VH backscatter due to the specular reflection of radar waves on the smooth water surface.
+    By comparing the VV/VH ratio, it becomes possible to differentiate between standing crops and harvested or sparse areas. Harvested or sparse areas tend to have higher VV/VH ratios due to reduced vegetation density. Similarly, flooded rice fields exhibit different radar backscatter characteristics compared to non-flooded areas.
+   - The VV polarization is sensitive to the presence of water, while the VH polarization is influenced by both surface roughness and the presence of water.
+    - By comparing the VV/VH ratio, flooded areas in rice fields can be identified, marked by higher VV/VH ratios due to increased backscatter from water.
+
+2. Extracting the flooded areas: 
+
+    -  Sentinel-1 SAR images are filtered based on instrument mode, orbit properties, and polarization (VV, VH, VV/VH). Then two image collections are defined: "Before-collection" for baseline conditions and "After-collection" for monitoring changes during and after potential flooding events.
+    - Flood area detection: Comparison of "Before" and "After" images to identify changes using a threshold value (1.25) based on statistical properties.
+    - The water pixels are converted into areas in hectares. 
+
+3. Estimate the flooding dates
+    - The aim is to determine the date of the maximum flooding. 
+:::
+:::
+
+### 1. Flooding activities progress and timeline analysis
+::: { .callout-tip}
+#### a. The timeseries data for S1, S2, and SAED data
+::: {.justify}
+The following data shows the cumulative flooded area over time. Included also is SAED data for the dry hot season in 2023 and 2024.
+:::
+:::
+```{python}
+#rs_data with duplicate plots---1431
+rs_mndwi_data_2024 = pd.read_csv(r"G:\My Drive\HEURISTICS\SRV_flooding_detection_models\Dagana\workflow\Dry_hot_season\2024\servir_2024\servir_flooding_data\dataframe\final_result\flooding_Dagana2024.csv",index_col=0)
+
+# Select columns that match the date format
+clean_df = rs_mndwi_data_2024[~np.array(rs_mndwi_data_2024['flooding_date']=='0')]
+
+clean_df ['RS flooding doy'] = pd.to_datetime( clean_df ['flooding_date']).dt.dayofyear
+rs_hueristics_df = clean_df.filter(regex=('\d{4}-?\d{2}-?\d{2}$'))
+
+# Load data
+rs_mndwi_data_2023 = pd.read_csv(r'G:\My Drive\HEURISTICS\SRV_flooding_detection_models\Dagana\workflow\Dry_hot_season\2024\servir_2023\servir_flooding_data_2023\dataframe\final_result\flooding_Dagana2023.csv', index_col=0)
+rs_vv_data_2024 = pd.read_csv(r"G:\My Drive\HEURISTICS\SRV_flooding_detection_models\Dagana\sentinel_one\flooding_data_s1_dagana_vv_2024.csv", index_col=0)
+rs_vh_data_2024 = pd.read_csv(r"G:\My Drive\HEURISTICS\SRV_flooding_detection_models\Dagana\sentinel_one\flooding_data_s1_dagana_vh_2024.csv", index_col=0)
+rs_vv_data_2023 = pd.read_csv(r"G:\My Drive\HEURISTICS\SRV_flooding_detection_models\Dagana\sentinel_one\flooding_data_s1_dagana_vv_2023.csv", index_col=0)
+rs_vh_data_2023 = pd.read_csv(r"G:\My Drive\HEURISTICS\SRV_flooding_detection_models\Dagana\sentinel_one\flooding_data_s1_dagana_vh_2023.csv", index_col=0)
+saed_2019_2024_dhs = pd.read_csv(r"G:\\My Drive\\HEURISTICS\\SRV_flooding_detection_models\\Dagana\\workflow\\Dry_hot_season\\2024\\saed_bulletins\\saed_2019_2024.csv")
+saed_2019_2024_dhs['date'] = pd.to_datetime(saed_2019_2024_dhs['Date'])
+
+# Process MNDWI data for 2024
+area_rs_24 = rs_hueristics_df.sum(axis=0)
+rs_df_24 = pd.DataFrame()
+rs_df_24['Date'] = list(area_rs_24.index)
+rs_df_24['Area(ha)'] = list(area_rs_24.values)
+rs_df_24['date'] = pd.to_datetime(rs_df_24['Date'])
+rs_df_24['Data_source'] ='S2 MNDWI 2024'
+# Process MNDWI data for 2023
+rs_hueristics_dff_2023 = rs_mndwi_data_2023.filter(regex=('\\d{4}-?\\d{2}-?\\d{2}$'))
+area_rs_23 = rs_hueristics_dff_2023.sum(axis=0)
+rs_df_23 = pd.DataFrame()
+rs_df_23['Date'] = list(area_rs_23.index)
+rs_df_23['Area(ha)'] = list(area_rs_23.values)
+rs_df_23['Data_source'] = 'S2 MNDWI 2023'
+rs_df_23['date'] = pd.to_datetime(rs_df_23['Date'])
+
+# Process S1 VV and VH data for 2024
+area_vv_24 = rs_vv_data_2024.filter(regex=('\\d{4}-?\\d{2}-?\\d{2}$')).sum(axis=0)
+rs_df_vv_24 = pd.DataFrame()
+rs_df_vv_24['Date'] = list(area_vv_24.index)
+rs_df_vv_24['Area(ha)'] = list(area_vv_24.values)
+rs_df_vv_24['Data_source'] = 'S1 VV 2024'
+rs_df_vv_24['date'] = pd.to_datetime(rs_df_vv_24['Date'])
+
+area_vh_24 = rs_vh_data_2024.filter(regex=('\\d{4}-?\\d{2}-?\\d{2}$')).sum(axis=0)
+rs_df_vh_24 = pd.DataFrame()
+rs_df_vh_24['Date'] = list(area_vh_24.index)
+rs_df_vh_24['Area(ha)'] = list(area_vh_24.values)
+rs_df_vh_24['Data_source'] = 'S1 VH 2024'
+rs_df_vh_24['date'] = pd.to_datetime(rs_df_vh_24['Date'])
+
+# Process S1 VV and VH data for 2023
+area_vv_23 = rs_vv_data_2023.filter(regex=('\\d{4}-?\\d{2}-?\\d{2}$')).sum(axis=0)
+rs_df_vv_23 = pd.DataFrame()
+rs_df_vv_23['Date'] = list(area_vv_23.index)
+rs_df_vv_23['Area(ha)'] = list(area_vv_23.values)
+rs_df_vv_23['Data_source'] = 'S1 VV 2023'
+rs_df_vv_23['date'] = pd.to_datetime(rs_df_vv_23['Date'])
+
+area_vh_23 = rs_vh_data_2023.filter(regex=('\\d{4}-?\\d{2}-?\\d{2}$')).sum(axis=0)
+rs_df_vh_23 = pd.DataFrame()
+rs_df_vh_23['Date'] = list(area_vh_23.index)
+rs_df_vh_23['Area(ha)'] = list(area_vh_23.values)
+rs_df_vh_23['Data_source'] = 'S1 VH 2023'
+rs_df_vh_23['date'] = pd.to_datetime(rs_df_vh_23['Date'])
+
+# Filter SAED data for 2023 and 2024
+saed_data_2023 = saed_2019_2024_dhs[saed_2019_2024_dhs['date'].dt.year == 2023]
+saed_data_2024 = saed_2019_2024_dhs[saed_2019_2024_dhs['date'].dt.year == 2024]
+
+# Combine dataframes for 2023
+combined_df_2023 = pd.concat([rs_df_23, rs_df_vv_23, rs_df_vh_23, saed_data_2023],axis=0)
+#combined_df_2023['Day'] = combined_df_2023['date'].dt.day
+#combined_df_2023['Month'] = combined_df_2023['date'].dt.month
+combined_df_2023['Year'] = combined_df_2023['date'].dt.year
+combined_df_2023['Day of year'] = combined_df_2023['date'].dt.dayofyear
+
+# Combine dataframes for 2024
+combined_df_2024 = pd.concat([rs_df_24, rs_df_vv_24, rs_df_vh_24, saed_data_2024])
+#combined_df_2024['Day'] = combined_df_2024['date'].dt.day
+#combined_df_2024['Month'] = combined_df_2024['date'].dt.month
+combined_df_2024['Year'] = combined_df_2024['date'].dt.year
+combined_df_2024['Day of year'] = combined_df_2024['date'].dt.dayofyear
+
+# Define a consistent color palette for all data sources
+palette = {
+    'S2 MNDWI 2023': 'green',
+    'S2 MNDWI 2024': 'green',
+    'S1 VV 2023': 'blue',
+    'S1 VH 2023': 'red',
+    'SAED prepared area 2023': 'purple',
+    'SAED planted area 2023': 'orange',
+    'S2 MNDWI 2024': 'green',
+    'S1 VV 2024': 'blue',
+    'S1 VH 2024': 'red',
+    'SAED prepared area 2024': 'purple',
+    'SAED planted area 2024': 'orange'
+}
+
+combined_df_23_24 = pd.concat([combined_df_2023,combined_df_2024])
+combined_df_23_24['Area(ha)'] = combined_df_23_24['Area(ha)'].round(2)
+html_table = combined_df_23_24.to_html(index=True)
+
+# Wrap in a scrollable div
+scrollable_table = f"""
+<div style="height: 400px; width: 100%; overflow-x: auto; overflow-y: auto;">
+    {html_table}
+</div>
+"""
+# Display the scrollable table
+display(HTML(scrollable_table))
+```
+
+::: { .callout-tip}
+#### b. Comparison the above output
+::: {.justify}
+The SAED forecast for 2024 predicts a decrease to 39,850 hectares under rice cultivation compared to 2023, when it was 41,000 hectares. 
+
+Observation:
+    - Both years show a gradual increase in flooded area from the start of the year, with a significant rise around the planting period (February 15th to March 15th).
+    - Flooded Area (2023): Higher overall flooded area in 2023 compared to 2024.
+    - The trend shows that most of the flooding and planting activities are concentrated around the designated planting period (February 15th to March 15th).
+    - The S1 data in 2024 indicates a smaller extent of flooding activities compared to S2 and SAED data.
+    - The S1 data aligns closely with the SAED prepared area data.
+
+:::
+:::
+```{python}
+# Define the start and end dates for vertical lines
+start_date = datetime.strptime('2024-02-15', '%Y-%m-%d').timetuple().tm_yday
+end_date = datetime.strptime('2024-03-15', '%Y-%m-%d').timetuple().tm_yday
+
+fig, axes = plt.subplots(2, 1, figsize=(12, 10), sharex=True)
+
+# Plot for 2023
+sns.lineplot(ax=axes[0], data=combined_df_2023, x='Day of year', y='Area(ha)', hue='Data_source', marker='o', palette=palette)
+axes[0].set_title('Flooded area over time with RS and SAED data (2023)')
+axes[0].set_xlabel('Day of the year')
+axes[0].set_ylabel('Area (ha)')
+axes[0].legend(title='Data Source', bbox_to_anchor=(1.05, 1), loc='upper left')
+axes[0].grid(True)
+
+axes[0].axvline(start_date, color='black', linestyle='--')
+axes[0].axvline(end_date, color='black', linestyle='--')
+
+# Add labels for the vertical lines
+axes[0].text(start_date, 37000, 'Start planting (15FEB)', ha='right', va='bottom', color='black')
+axes[0].text(end_date, 37000, 'End planting (15MARCH)', ha='left', va='bottom', color='black')
+# Plot for 2024
+sns.lineplot(ax=axes[1], data=combined_df_2024, x='Day of year', y='Area(ha)', hue='Data_source', marker='o', palette=palette)
+axes[1].set_title('Flooded area over time with RS and SAED data (2024)')
+axes[1].set_xlabel('Day of the year')
+axes[1].set_ylabel('Area (ha)')
+axes[1].legend(title='Data Source', bbox_to_anchor=(1.05, 1), loc='upper left')
+axes[1].grid(True)
+
+# Add vertical lines for start and end dates on the 2024 plot
+axes[1].axvline(start_date, color='black', linestyle='--')
+axes[1].axvline(end_date, color='black', linestyle='--')
+
+# Add labels for the vertical lines
+axes[1].text(start_date, 27000, 'Start planting (15FEB)', ha='right', va='bottom', color='black')
+axes[1].text(end_date, 27000, 'End planting (15MARCH)', ha='left', va='bottom', color='black')
+
+plt.tight_layout()
+plt.show()
+
+```
+
+### 2. Mapping the flooding extend in dagana in 2023 and 2024
+::: { .callout-tip}
+#### a. Risky analysis associated to flooding 
+::: {.justify}
+The comparison of the flooding maps for 2023 and 2024 highlights the spatial and temporal variations in flooding risks within the Dagana region. These insights can guide better agricultural and flood management practices to mitigate risks and ensure timely planting.
+
+We utilize flooding date information to classify the plots that have experienced flooding and have been planted within the SAED window, which spans from February 15th to March 15th. Given that the latest image is from March 17th, plots are categorized as low risk if the flooding date falls on or before the 77th day of the year and as high risk if flooded/planted after day 77.
+
+### Observations:
+
+    - In both years, the majority of the area is marked in green, indicating low-risk plots.
+    - There are notable differences in the distribution of red areas (high-risk plots) between the two years.
+    - The 2024 map shows a higher concentration of red areas (high-risk plots) in the southern and central parts of the region, with scattered red areas in the northern part.
+    - The 2023 map shows a different distribution pattern, with more red areas in the northern and central parts of the region.
+    - The southern part of the 2023 map has fewer red areas compared to the 2024 map.
+    - Fewer red areas suggest better alignment with the planting schedule, possibly due to more favorable conditions or better management.
+    - More red areas indicate that many plots were either flooded or planted past the SAED window, suggesting potential delays due to various reasons, including delayed financing which affects access to labor and resources.
+    - In summary, the 2024 flooding map shows a better overall flooding and planting situation with fewer high-risk (red) plots compared to 2023.
+
+The differences in risk distribution between the two years can help in understanding the changing patterns of flooding and adjusting agricultural practices accordingly. Areas with consistent high-risk plots across years may need further investigation and potentially more robust flooding management strategies to avoid credit defaults and losses.
+  
+:::
+:::
+
+```{python}
+#************** spatial distribution********************
+# Step 3: Generate Risk Analysis Plot for Each Data Source
+def create_risk_analysis_plot(map_path, boundary_path, title, data_source, date_range):
+    with rio.open(map_path) as src:
+        mp = src.read(1)
+        extent = rio.plot.plotting_extent(src)
+
+        # Mask out no data values (if any)
+        nodata_value = src.nodata
+        mp_masked = np.ma.masked_equal(mp, nodata_value)
+
+        # Create custom colormap with green and red colors
+        colors = ['white', '#38E54D', '#FF1E1E']
+        bounds = [0, 7, 77, np.max(mp)]  # Values below 77 are green, above or equal to 77 are red
+        cmap = ListedColormap(colors)
+        norm = BoundaryNorm(bounds, len(colors))
+
+        # Read the boundary data
+        boundary = gpd.read_file(boundary_path)
+        boundary = boundary.to_crs(src.crs)
+
+        # Create a figure and axis
+        fig, ax = plt.subplots(figsize=(12, 12))
+
+        # Set background color to white
+        ax.set_facecolor('white')
+
+        # Plot the flooding map with custom colormap
+        show(mp_masked, ax=ax, extent=extent, alpha=0.5, cmap=cmap, norm=norm)
+
+        # Plot the boundary
+        boundary.plot(ax=ax, facecolor="none", edgecolor="black")
+
+        # Set plot title and labels
+        ax.set_title(title, fontsize=14)
+        ax.set_xlabel('Longitude', fontsize=12)
+        ax.set_ylabel('Latitude', fontsize=12)
+
+        # Add data source and relevant details
+        ax.annotate(data_source + "\n" + date_range, xy=(0.5, -0.15), xycoords='axes fraction', ha='center', fontsize=10)
+
+        # Create custom legend
+        handles = [plt.Rectangle((0, 0), 1, 1, color=color) for color in colors]
+        labels = ['No data', 'Plots at low risk-flooded and planted in time', 'Plots at risk -flooded/planted past SAED window']
+        ax.legend(handles, labels, title='Risk analysis', loc='lower right')
+        plt.tight_layout()
+        plt.show()
+
+# Define paths and titles for each plot
+map_paths = [
+    r"G:\My Drive\HEURISTICS\SRV_flooding_detection_models\Dagana\workflow\Dry_hot_season\Maps\flooding_map_Daganaser_2024.tif",
+    r"G:\My Drive\HEURISTICS\SRV_flooding_detection_models\Dagana\workflow\Dry_hot_season\Maps\flooding_map_Daganaser_2023.tif",
+  # r"G:\My Drive\HEURISTICS\SRV_flooding_detection_models\Dagana\sentinel_one\image_2023-05-31_1.25vv.tif",
+  # r"G:\My Drive\HEURISTICS\SRV_flooding_detection_models\Dagana\sentinel_one\image_2024-05-30_1.3vv.tif"
+]
+
+boundary_path = r"G:\My Drive\HEURISTICS\SRV_flooding_detection_models\Dagana\workflow\Dry_hot_season\dagana_region.geojson"
+
+titles = [
+    'Dagana flooding map S2 MNDWI, 2024',
+    'Dagana flooding map S2 MNDWI, 2023',
+    #'Dagana flooding map S1VV, 2023',
+   # 'Dagana flooding map S1VV, 2024'
+]
+
+data_sources = [
+    "Data Source: S2 2024 RS Analysis",
+    "Data Source: S2 2023 RS Analysis",
+    #"Data Source: S1 2023 RS Analysis",
+    #"Data Source: S1 2024 RS Analysis"
+]
+
+date_ranges = [
+    "Date Range: January - July 2024",
+    "Date Range: January - July 2023",
+    #"Date Range: January - May 2023",
+    #"Date Range: January - May 2024"
+]
+
+# Generate plots
+for map_path, title, data_source, date_range in zip(map_paths, titles, data_sources, date_ranges):
+    create_risk_analysis_plot(map_path, boundary_path, title, data_source, date_range)
+
+display()
+```
+
+::: { .callout-tip}
+#### b.  Spatial distribution of the maps
+::: {.justify}
+- Flooding maps - We will show just the 2024 map that depicts the extent of the flooded rice area across the plots in the region, between January and 1st July.
+- The spatial distribution of the estimated dates in the region.
+:::
+:::
+
+```{python}
+
+def create_flooding_map_plot(map_path, boundary_path, title, data_source, date_range):
+    with rio.open(map_path) as src:
+        mp = src.read(1)
+        extent = rio.plot.plotting_extent(src)
+
+        # Define the custom colormap
+        colors = ['white', 'yellow', 'green', 'blue', 'pink', 'orange', 'red']
+        bounds = [0, 20, 40, 60, 80, 100, 120, np.max(mp)]  # Define the boundaries for each color group
+        cmap = ListedColormap(colors)
+        norm = BoundaryNorm(bounds, len(colors))
+
+        # Mask zero values
+        masked_mp = np.ma.masked_where(mp == 7, mp)
+
+        # Read the boundary data
+        boundary = gpd.read_file(boundary_path)
+        boundary = boundary.to_crs(src.crs)
+
+        # Create a figure and axis
+        fig, ax = plt.subplots(figsize=(15, 15))
+
+        # Plot the raster data with custom colormap
+        show(masked_mp, ax=ax, cmap=cmap, norm=norm, extent=extent)
+
+        # Plot the boundary
+        boundary.plot(ax=ax, facecolor="none", edgecolor="black")
+
+        # Create a ScalarMappable for the colorbar
+        sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+        sm.set_array(masked_mp)
+        cbar = plt.colorbar(sm, ax=ax, shrink=0.6)
+        cbar.set_label('Flooding day of the year')
+
+        # Set plot title and labels
+        ax.set_title(title, fontsize=14)
+        ax.set_xlabel('Longitude', fontsize=12)
+        ax.set_ylabel('Latitude', fontsize=12)
+
+        # Add data source and relevant details
+        ax.annotate(data_source + "\n" + date_range, xy=(0.5, -0.15), xycoords='axes fraction', ha='center', fontsize=10)
+
+        plt.tight_layout()
+        plt.show()
+
+# Define paths and titles for each plot
+map_paths = [
+    r"G:\My Drive\HEURISTICS\SRV_flooding_detection_models\Dagana\workflow\Dry_hot_season\Maps\flooding_map_Daganaser_2024.tif",
+    r"G:\My Drive\HEURISTICS\SRV_flooding_detection_models\Dagana\workflow\Dry_hot_season\Maps\flooding_map_Daganaser_2023.tif"
+]
+
+boundary_path = r"G:\My Drive\HEURISTICS\SRV_flooding_detection_models\Dagana\workflow\Dry_hot_season\dagana_region.geojson"
+
+titles = [
+    'Dagana flooding map S2 MNDWI, 2024',
+    'Dagana flooding map S2 MNDWI, 2023'
+]
+
+data_sources = [
+    "Data Source: S2 2024 RS Analysis",
+    "Data Source: S2 2023 RS Analysis"
+]
+
+date_ranges = [
+    "Date Range: January - July 2024",
+    "Date Range: January - July 2023"
+]
+
+# Generate plots
+for map_path, title, data_source, date_range in zip(map_paths, titles, data_sources, date_ranges):
+    create_flooding_map_plot(map_path, boundary_path, title, data_source, date_range)
+
+```
+
+
+
+###  Estimated flooding dates for 2023 and 2024 using Sentinel 2
+::: { .callout-tip}
+#### Frequency of flooding dates over the year,
+::: {.justify}
+This bar chart shows the frequency of flooding dates over the season, categorized by two different datasets: "rs_mndwi_data_2024" and "rs_mndwi_data_2023".
+
+Observations:
+
+- Flooding events appear to be concentrated primarily in the first 100 days of the year for both datasets.
+- There are several peaks in flooding frequency for both datasets, indicating multiple significant flooding events or periods.
+- The remote sensing data 2024  (blue bars) shows a higher frequency of flooding events compared to remotensing data 2023 (green bars), especially around days 50 to 75.
+- Both datasets have similar patterns, but remotensing data 2024 has more consistent and higher frequency peaks.
+- Days with notable flooding events include around days 10, 25, 50, 75, and 100. Both datasets show some flooding events on these days, but the frequency differs.
+
+:::
+:::
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+
+def process_flooding_data(df, date_col='flooding_date'):
+    # Filter out rows where 'flooding_date' is '0'
+    df = df[~(df[date_col] == '0')]
+    
+    # Convert 'flooding_date' to datetime
+    df[date_col] = pd.to_datetime(df[date_col])
+    
+    # Extract the day of the year
+    df['day_of_year'] = df[date_col].dt.dayofyear
+    
+    return df
+
+# Process all datasets
+rs_mndwi_data_2024 = process_flooding_data(rs_mndwi_data_2024)
+rs_mndwi_data_2023 = process_flooding_data(rs_mndwi_data_2023)
+
+# Step 3: Aggregate and Count Flooding Events by Day of the Year
+# Combine all datasets into one DataFrame
+combined_df = pd.concat([
+    rs_mndwi_data_2024['day_of_year'],
+    rs_mndwi_data_2023['day_of_year']
+])
+
+# Create a dictionary to store the frequency of flooding events for each dataset
+frequency_dict = {
+    'rs_mndwi_data_2024': rs_mndwi_data_2024['day_of_year'].value_counts().sort_index(),
+    'rs_mndwi_data_2023': rs_mndwi_data_2023['day_of_year'].value_counts().sort_index()
+}
+
+# Plot the frequency of flooding dates by day of the year
+plt.figure(figsize=(12, 8))
+
+# Define a color map for different datasets
+colors = ['green', 'blue']
+datasets = list(frequency_dict.keys())
+
+# Plot each dataset with a different color
+for idx, dataset in enumerate(datasets):
+    days = frequency_dict[dataset].index
+    frequencies = frequency_dict[dataset].values
+    plt.bar(days, frequencies, width=1.8, alpha=0.6, color=colors[idx], label=dataset)  # Thicker bars with width=1.5
+
+plt.xlabel('Day of Year')
+plt.ylabel('Frequency of Flooding')
+plt.title('Flooding Dates Over the Season  by Dataset')
+plt.legend(title='Dataset', bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+```
+
+### Next steps
+::: { .callout-tip}
+#### To do list
+::: {.justify}
+1. Finalize the sentinel 1 workflow 
+2. Fuse the  sentinel 1 and 2 output for flooding timing estimates
+3. Compare the estimated flooding dates with field data from agCelerant.
+3. Adopt the fused workflow for harvest monitoring.
+:::
+:::
+
+
+
+
+
+
+
+
+
+
+
+
+
