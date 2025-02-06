@@ -1,0 +1,22 @@
+#install the packages
+streamlit
+geemap
+setuptools
+earthengine-api
+google-auth                                                  
+spicy
+plotly
+tqdm
+branca
+#altair
+folium
+rasterio
+geopandas
+shapely
+pandas
+numpy
+matplotlib
+seaborn
+contextily
+scipy
+statsmodels
