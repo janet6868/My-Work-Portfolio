@@ -1,0 +1,864 @@
+---
+title: "Senegal Rice Value Chain Network"
+date: today
+date-format: long
+author: "Financial instruments"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    page-layout: full
+    theme:
+          light: flatly
+          dark: darkly
+    number-sections: false
+    highlighting: true
+    smooth-scroll: true
+    highlighting-style: GitHub
+    self-contained: false
+execute:
+    echo: false
+    warning: false
+    enable: true
+
+title-block-banner: true
+---
+
+```{=html}
+<style type="text/css">
+
+h1.title {
+  font-size: 20px;
+  color: White;
+  text-align: center;
+}
+h4.author { /* Header 4 - and the author and data headers use this too  */
+    font-size: 16px;
+  font-family: "Source Sans Pro Semibold", Times, serif;
+  color: Red;
+  text-align: center;
+}
+h4.date { /* Header 4 - and the author and data headers use this too  */
+  font-size: 16px;
+  font-family: "Source Sans Pro Semibold", Times, serif;
+  color: Red;
+  text-align: center;
+}
+</style>
+```
+
+------------------------------------------------------------------------
+:::{.column-page}
+
+::: {style="text-align:center"}
+<h2>Classification of LULC using Sentinel 2 data</h2>
+:::
+
+</br>
+
+```{python}
+import re  # For preprocessing
+import pandas as pd  # For data handling
+from time import time  # To time our operations
+from collections import defaultdict  # For word frequency
+import glob
+import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+
+from gensim.models import Word2Vec
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+nltk.download('stopwords')
+import spacy  # For preprocessing
+import string
+import numpy as np
+import random
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+from plotly import graph_objs as go
+import plotly.express as px
+import plotly.figure_factory as ff
+from collections import Counter
+
+from PIL import Image
+from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import LatentDirichletAllocation
+from sklearn.feature_extraction.text import CountVectorizer
+
+import geopandas as gpd
+from shapely.geometry import Point
+import folium
+import ast
+from shapely.wkt import loads
+from tqdm import tqdm
+from spacy.util import compounding
+from spacy.util import minibatch
+
+import warnings
+warnings.filterwarnings("ignore")
+from gensim.models.phrases import Phrases, Phraser
+#from sklearn.feature_extraction.text import TfiextractedVectorizer
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+from matplotlib.cm import get_cmap
+import os
+import pytz
+from shapely.geometry import Point
+from pyvis.network import Network
+import networkx as nx
+from IPython.core.display import display, HTML
+
+import logging  # Setting up the loggings to monitor gensim
+logging.basicConfig(format="%(levelname)s - %(asctime)s: %(message)s", datefmt= '%H:%M:%S', level=logging.INFO)
+
+```
+```{python}
+import nltk
+nltk.download('brown')
+from nltk.tag import pos_tag, UnigramTagger, BigramTagger, TrigramTagger
+
+```
+```{python}
+# @title Load the files
+mentions2_data =  pd.read_csv('output/mentions2.tsv', delimiter='\t')
+experiment = pd.read_csv('output/senegal-experiment.tsv', delimiter='\t')
+peanuts_data = pd.read_csv('output/senegal-peanuts.tsv', delimiter='\t')
+rice_data = pd.read_csv('output/senegal-rice.tsv', delimiter='\t')
+saed_data = pd.read_csv('output/senegal-saed.tsv', delimiter='\t')
+stakeholders_df = pd.read_csv('output/senegal-stakeholders.tsv', delimiter='\t')
+```
+
+```{python}
+import pandas as pd
+from shapely.geometry import Point
+import re
+
+# Function to extract the first location from the given column
+def extract_first_location(loc_column):
+    locations = []
+    for locs in loc_column:
+        if pd.notna(locs):
+            loc_list = re.findall(r'([A-Za-z\s\.\-]+)\s\(([^,]+),\s([^\)]+)\)', locs)
+            if loc_list:
+                location_name = loc_list[0][0].strip()
+                latitude = float(loc_list[0][1].strip())
+                longitude = float(loc_list[0][2].strip())
+                locations.append((location_name, latitude, longitude))
+            else:
+                locations.append((None, None, None))
+        else:
+            locations.append((None, None, None))
+    return locations
+
+# Extract locations from 'sent_locs' and 'context_locs'
+sent_locations = extract_first_location(stakeholders_df['sent_locs'])
+context_locations = extract_first_location(stakeholders_df['context_locs'])
+
+# Combine the extracted location information
+locations = []
+for sent_loc, context_loc in zip(sent_locations, context_locations):
+    location = sent_loc if sent_loc[0] is not None else context_loc
+    locations.append(location)
+
+# Create new columns for location, latitude, longitude, and geometry
+stakeholders_df['location'] = [loc[0] for loc in locations]
+stakeholders_df['latitude'] = [loc[1] for loc in locations]
+stakeholders_df['longitude'] = [loc[2] for loc in locations]
+stakeholders_df['geometry'] = stakeholders_df.apply(lambda x: Point((x['longitude'], x['latitude'])) if pd.notna(x['longitude']) and pd.notna(x['latitude']) else None, axis=1)
+columns_to_drop = ['url', 'sentenceIndex', 'causal',
+       'causalIndex', 'negationCount', 'causeIncCount', 'causeDecCount',
+       'causePosCount', 'causeNegCount', 'effectIncCount', 'effectDecCount',
+       'effectPosCount', 'effectNegCount', 
+       'sentiment_scores', 'sent_locs', 'context_locs', 
+       'prevLocation', 'prevDistance', 'nextLocation', 'nextDistance',
+        'causeText',	'effectText',	'belief','date'	]
+stakeholders_df = stakeholders_df.drop(columns=columns_to_drop)
+# Display the first few rows to verify
+stakeholders_df.head()
+```
+
+```{python}
+# Step 2: Filter locations within Senegal's geographical boundaries
+# Senegal roughly lies between latitudes 12.0 to 17.0 and longitudes -17.7 to -11.5
+senegal_df = stakeholders_df[
+    (stakeholders_df['latitude'].between(12.0, 17.0)) & 
+    (stakeholders_df['longitude'].between(-17.7, -11.5))
+]
+
+# Display the first few rows to verify
+senegal_df.head()
+```
+
+```{python}
+geo_df = gpd.GeoDataFrame(senegal_df, geometry=senegal_df.geometry)
+
+# Load the world map
+world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+
+# Plot the map
+fig, ax = plt.subplots(figsize=(10, 10))
+world[world.name == "Senegal"].plot(ax=ax, color='lightgray', edgecolor='black')
+
+# Plot the points
+geo_df.plot(ax=ax, color='red', markersize=50, alpha=0.7)
+
+# Set plot title and labels
+plt.title("Stakeholder Locations in Senegal")
+plt.xlabel("Longitude")
+plt.ylabel("Latitude")
+plt.grid(True)
+
+# Display the map
+plt.show()
+```
+
+```{python}
+# Load the pre-trained POS tagger models
+unigram_tagger = UnigramTagger(nltk.corpus.brown.tagged_sents())
+bigram_tagger = BigramTagger(nltk.corpus.brown.tagged_sents(), backoff=unigram_tagger)
+trigram_tagger = TrigramTagger(nltk.corpus.brown.tagged_sents(), backoff=bigram_tagger)
+
+# Load the pre-trained spaCy model
+nlp = spacy.load('en_core_web_sm')
+
+# Define a rule-based POS tagger
+def rule_based_pos_tagger(sentence):
+    # Apply basic rules to handle certain POS tags
+    tagged_sentence = []
+    for word in sentence.split():
+        if word.endswith('ing'):
+            tagged_sentence.append((word, 'VERB'))
+        elif word.endswith('ed'):
+            tagged_sentence.append((word, 'VERB'))
+        elif word.endswith('s') and len(word) > 3:
+            tagged_sentence.append((word, 'NOUN'))
+        else:
+            tagged_sentence.append((word, None))
+
+    # Use the statistical models to tag the remaining words
+    tagged_sentence = trigram_tagger.tag([word for word, _ in tagged_sentence])
+
+    return tagged_sentence
+
+# Define a function to use the neural network-based POS tagger
+def neural_network_pos_tagger(sentence):
+    doc = nlp(sentence)
+    return [(token.text, token.pos_) for token in doc]
+
+# Apply the hybrid POS tagger to the sentences in the dataframe
+senegal_df['pos_tags'] = senegal_df['sentence'].apply(lambda x: rule_based_pos_tagger(x) if len(x.split()) < 10 else neural_network_pos_tagger(x))
+```
+
+```{python}
+# Provided nested list of words/phrases to extract
+nested_unwanted_words_1 = [
+    'De Vries', 'Cotonou, Benin Vegetation', 'NV 89557', 'Kc 9 ETref',
+    'ASCE-EWRI 2005', 'the Penman-Monteith', 'Deep percolationth Runoff Peff',
+    'Estimation of NUE', 'd5Th where', 'kg-1 N', '41.2 C', 'Daily Eta',
+    'De Vries', 'HDS 2006', 'Bouraima et al. 2015', 'kg-1 N', 'kg-1 N',
+    'kg-1 N', 'kg-1 N', 'kg-1 N', 'kg-1 N', 'a d e Food', 'ScienceDirect',
+    'Mamprugu-Maogduri District', 'Statistical Package and Service Solution',
+    'Focus group', 'Focus group', 'Focus group', 'Focus group', 'Loagri No. 1', 
+    'Loagri No. 1', 'Guodaar et al.', 'millet, sorghum and maize', 'ScienceDirect Heliyon', 
+    'Adjabui et al', 'Field Observations', 'Karlan et al', 'Kumbhakar et al.', 
+    'the Propensity Score Matching', 'Tasila Konja', 'Marginal Factor Cost', 'LL y*i UL', 
+    'Formal Credit Model : pdFCi', 'i. the pooled', 'the Wald chi2', 'Tables 7 and 8)', 
+    'Swinnen & Maertens', 'Neven & Reardon', 'Ofuoku & Agbamu', 'Bidzakin, Fialor, & Yahaya', 
+    'Benin (Maertens & Vande Velde', 'Verhofstadt & Maertens', 'the Structure-ConductPerformance', 
+    'Hopkins & Wallerstein', 'Gereffi & Korzeniewicz', 'Gergely & Baris', 'Demont & Rizzotto', 
+    'Soullier & Moustier', 'Belieres & Toure', 'Belieres & Toure', "the", 'the’', 
+    'Belieres & Toure', 'The Caisse de Perequation et de Stabilisation des Prix', 
+    'Belieres & Toure', 'Belieres & Toure', 'Belieres & Toure', 'Belieres & Toure', 
+    'Belieres & Toure', 'Belieres & Toure', 'Belieres & Toure', 'Belieres & Toure', 
+    'Belieres & Toure', 'Demont & Ndour'
+]
+
+nested_unwanted_words_2 = [
+    'Burkina Faso', 'Burkina Faso', 'Styger & Traore', 'Burkina Faso', 
+    '2) Research', '4) Development', 'Perry & Steduto 2017', 'Styger & Traore', 
+    'Alternate Wetting','Osinski & Sylla 2018','Green Manure', 'Lumpkin & Pluecknett', 
+  'Green Manure', 'Subedi & Shrestha','Le Mer & Roger 2001', 'Urea Deep Placement', 
+    'Urea Deep Placement','Settle & Garba 2011', 'Settle & Garba 2011', 
+    'Settle & Hama Garba', 'Leach & Mumford 2008', 'Pesticide Environment Accounting', 
+    'Cuyno et al. 2001', 'Maumbe & Swinton', 'the integrated pest',
+    'Hafele et al. 1999', 'Bogdanski et al. 2016', 'Rodenburg & Johnson', 
+    'Halwart & Gupta', 'Saglio & Pradet 1983',
+    'Mission Letter', 'Sierra Leone', 'Sierra Leone',  'banana and potato',
+    'Campbell et al. 2009', 'von Braun', 'the 17 Goals','Rural Poverty Scenarios', 
+   'the Sustainable Development Goals', 'Ten Elements of Agroecology',
+   'Solidarity Economy - Training', 
+    'BAU Agroecology11 - Support', 'Agroecology Intervention Policy/Assumption',
+    'Burkina Faso','Agroecology Intervention Policy/Assumption', 'BAU Agroecology11 Co-Creation', 
+    'Social Value Job','education20 0.22 2030:','System Dynamics', 
+    '40 Amounts', 'Integrated Pest Management', 'the TEEBAgriFood Framework', 
+    'the Sustainable Development Goals','the Agroecology (AE', 
+    'Settle & HamaGarba 2009', 
+    'Kaufmann et al 1999',
+    'the TEEBAgriFood Framework','the UN Environment','266', 
+    'ScienceDirect Field Crops Research Journal Homepage', 'Field Crops Research 266',
+    'Burkina Faso','Field Crops Research 266', 
+    'Burkina Faso', 'Vertisols (Deckers', 'van Oort et al.',
+   'Field Crops Research 266', 'van Oort',
+    'Field Crops Research 266', 'Field Crops Research 266',
+    'Field Crops Research 266', 'van Oort','Bagre, Burkina Faso',
+    'FieldCropsResearch266(2021)108149 A', 'Field Crops Research 266',
+    ' 1,''Krupnik et al','LaHue et al.', 
+    'Field Crops Research 266',
+    'Field Crops Research 266', 'TA N CE', 
+    'U p p', 'U p p er W', 'Mojo et al', 'S360 Food and Nutrition Bulletin'
+    'Cesare Giulio Viola', '00148 Rome', 'Sierra Leone','Type Research', 'Salam Contract', 
+  'Emerald Publishing Limited','Zakah, Waqf and Sadaqah', 
+    'Institutional Demand','Institutional Demand','Institutional Demand', 
+    'Table I. Sources', 'Bangladesh Bureau of Statistics', 'k i k k',
+    'PS exp exp k r',  'n ce p ri ce s', 'https://academ ic.oup.com /qje', 
+    'https://academ ic.oup.com /qje', 'Investment and Insurance Table IV', 
+    'BIit Kit', 'https://academ ic.oup.com /qje', 
+    'https://academ ic.oup.com /qje', 'Table V', 'https://academ ic.oup.com /qje', 
+    'Table V', 'Table V', 'https://academ ic.oup.com /qje'
+]
+
+nested_unwanted_words_2 = [
+    'Burkina Faso','Burkina Faso', 'Styger & Traore', 'Burkina Faso', 
+    '2) Research', '4) Development', 'Perry & Steduto 2017', 'Styger & Traore', 
+    'Alternate Wetting', 'Osinski & Sylla 2018', 'Green Manure', 'Lumpkin & Pluecknett', 
+    'Green Manure', 'Subedi & Shrestha','Le Mer & Roger 2001', 'Urea Deep Placement', 
+    'Urea Deep Placement','Settle & Garba 2011', 'Settle & Garba 2011', 
+    'Settle & Hama Garba', 'Leach & Mumford 2008', 'Pesticide Environment Accounting', 
+    'Cuyno et al. 2001', 'Maumbe & Swinton', 'the integrated pest', 
+    'Hafele et al. 1999', 'Bogdanski et al. 2016', 'Rodenburg & Johnson', 
+    'Halwart & Gupta', 'Saglio & Pradet 1983', 
+    'Mission Letter', 'Sierra Leone', 'Sierra Leone', 'banana and potato', 'Campbell et al. 2009', 'von Braun', 'the 17 Goals','Rural Poverty Scenarios', 
+    'the Sustainable Development Goals','Ten Elements of Agroecology',
+ 'Solidarity Economy - Training',
+    'BAU Agroecology11 - Support', 'Agroecology Intervention Policy/Assumption',
+    'Burkina Faso','Agroecology Intervention Policy/Assumption', 'BAU Agroecology11 Co-Creation', 
+    'Social Value Job','education20 0.22 2030:', 'System Dynamics', 
+    '40 Amounts', 'Integrated Pest Management', 'the TEEBAgriFood Framework', 
+    'the Sustainable Development Goals','the Agroecology (AE',
+    'Settle & HamaGarba 2009', 'Kaufmann et al 1999',
+    'the TEEBAgriFood Framework', 'the UN Environment', '266', 
+    'ScienceDirect Field Crops Research Journal Homepage', 'Field Crops Research 266',
+    'Burkina Faso', 'Field Crops Research 266', 
+    'Burkina Faso','Vertisols (Deckers','van Oort et al.',
+    'Field Crops Research 266', 'van Oort',
+'    nloaded from https://onlinelibrary.w iley.com /doi/10.1111/j.1467-7679.2012.00584.x by U niversiteitsbibliotheek, W iley O nline L ibrary on [25/07/2024].',
+    'Field Crops Research 266', 'Field Crops Research 266', 
+    'Field Crops Research 266','van Oort', 'Bagre, Burkina Faso', 
+    'FieldCropsResearch266(2021)108149 A', 'Field Crops Research 266',  
+    ' 1,', 'Krupnik et al', 'LaHue et al.', 
+   'Field Crops Research 266', 
+    'Field Crops Research 266','TA N CE', 
+    'U p p', 'U p p er W', 'Mojo et al', 'S360 Food and Nutrition Bulletin',  
+    'Cesare Giulio Viola', '00148 Rome', 'Sierra Leone','Type Research', 'Salam Contract', 
+    'Emerald Publishing Limited','Zakah, Waqf and Sadaqah', 
+    'Institutional Demand', 'Institutional Demand','Institutional Demand',
+   'Table I. Sources', 'Bangladesh Bureau of Statistics','k i k k' ,
+    'PS exp exp k r']
+
+
+exclude_sources = [
+    "bourgault s mcdougal","the sample frame",
+    "de la","the","banana","more organic content",
+    "les lien dinterconnaissance","the continuous process",
+    "sowc baboucarr mannehc tendro radanielinad ouismarie raboina julie dusserrea alain ramantsoanirinae suchit shresthab ourollah ahmadia brigitte courtoisa cirad umr agap dept bio",
+    "the software", "ibrahim kedir",  "a comprehensive approach",
+    "both", "ce qui", "the next secondlevel decision",
+    "woodhouse","an integrated and comparative scenario analysis","water management",
+    "approximately speak",
+    "the fifteen",
+    "construction constant",  "its", "the gini coefficient", "la promotion de lagroecologie au", "deux souszone agro ecologiques", "the mangrove",  "de datta",
+    "accurate",
+    "the right direction",
+    "the five",  "any strategy",  "salinity management","the debate","unexpected outcome", "title",  "document",
+    "exemple les bonne",
+    "syst",
+    "the respective application dose",
+    "export policy",
+    "et al b van oort","second policy","three category", "n fertilizer", "protection", "food policy", "a viable solution",  "seniorcarr fleming", "tha",
+    "the current availability",
+    "the iron",
+    "jatropha karite",
+    "macroinvertebrate",
+    "the strong political edward gerardeaux gerardeauxciradfr upr aida f montpellier france aida univ espacedev",
+    "the csa discourse",
+    "new approach",
+    "rural economy",
+    "nationale de la",
+    "carbon offer",  "sadoulet irz et al diao et al bravoortega and lederman christiaensen et al anriquez",   "haefele",
+    "rice waterand nitrogenuse efficiency",
+    "extension",
+    "the key question",
+    "the broad shape",
+    "effectiveness",
+    "supplement",
+    "scale challenge",
+    "its people",
+    "recurrent economic crisis",
+    "employment creation and labor market participation",
+    "belgian congo",
+    "the holistic development",
+    "food calorie",
+    "their reach",
+    "ajayi et al",
+    "quality improvement",
+    "extreme poverty",
+    "these new cultivar",
+    "principal component analysis",
+    "a dilemma",
+    "budgetary intervention",
+    "a constant tillage depth",
+    "rice cultivar choice",
+    "the strategy",
+    "the grow period",
+    "a cloudbase",
+    "other site",
+    "the forecast",'et al cah',
+    "the total gdp",
+    "planting nitrogenfixing plant",
+    "those coalition",
+    "seck", "decade",  "product", "clement",
+    "the selection",  "march crop",  "rainfe region",  "c box chart",
+    "eg dakar diourbel fatick kaffrine kaolack kedougou kolda louga matam",
+    "three anonymous reviewer",
+    "a pairwise manner",
+    "short duration rice variety",
+    "a green antipolitic machine",
+    "separate garden",
+    "small fertilizer application dose",
+    "more traditional practice",
+    "irrigation requirement",
+    "unstable hydrology",   "netimporter",
+    "one farmer",   "alternative measure",
+    "improve variety table perception",  "an increase group",
+    "an equity standpoint",
+    "our hand breeding", "the csapfwas complete table",
+    "the onset",
+    "al diallo",
+    "p and k application rate",
+    "the model",
+    "the growth",
+    "rural equipment",
+    "different perspective",
+    "aw bravo g",
+    "daga birame",
+    "the soil surface",
+    "risk transfer",
+    "administration literature",
+    "their regression analysis",
+    "et al s assertion",
+    "infrastructure improvement",
+    "agricultural service",
+    "technology input",
+    "household awareness",
+    "men irrigate plot",
+    "multiple domain",
+    "image",
+    "davoir un minimum de ressource",
+    "this total estimate",
+    "batra ramaswamy alden steenkamp",
+    "the volume",
+    "csa solution",
+    "findo digitaris exilis",
+    "structural transformation",
+    "submergence",
+    "a complete list",
+    "bas acttcgccggtttcgcagaggatt",
+    "the bluegreen algae anabaena azollae",
+    "closely related nucleotide identity",
+    "the accountability",
+    "reference",
+    "historically public policy",
+    "severe haefele",
+    "minirice mill",
+    "a relatively good animal feed",
+    "various biophysical and socioeconomic factor",
+    "a long vegetative phase increase",
+    "market quality srv rice",
+    "iard",
+    "the success return",
+    "response",
+    "selfsufficiency"
+]
+# Combine the lists
+combined_nested_unwanted_words = nested_unwanted_words_1 + nested_unwanted_words_2 +exclude_sources
+
+# Remove empty lists and flatten the combined list into a single flat list
+flattened_words = [item for sublist in combined_nested_unwanted_words if sublist for item in (sublist if isinstance(sublist, list) else [sublist])]
+
+# Display the final flat list
+#flattened_words
+# Save the flattened list to a text file
+# file_path = '/mnt/data/exclusion_words.txt'
+
+# with open(file_path, 'w') as file:
+#     for word in flattened_words:
+#         file.write(f"{word}\n")
+
+# file_path
+```
+
+```{python}
+
+from pyvis.network import Network
+import networkx as nx
+
+def create_stakeholder_network():
+    # Initialize the directed graph
+    G = nx.DiGraph()
+
+    # Define stakeholder categories with corresponding colors
+    government_institutions = ["Government of Senegal", "CPSP", "Controle Economique", "Japanese Government", "Mauritanian Government"]
+    financial_institutions = ["CNCAS", "AfDB", "EIB", "BCEAO", "Commercial Banks", "World Bank", "Spanish Donors", "Japanese Donors"]
+    research_institutions = ["WARDA", "ISRA", "JICA", "AfricaRice", "University of California, Santa Cruz", "FAO Global IPM Facility"]
+    farmer_organizations = ["Smallholder Farmers", "Farmers' Union", "Debi-Tiguet Farmers", "Village Organizations", "Market-Oriented Organizations (MOs)", "Community-Oriented Organizations (COs)"]
+    ngos = ["Local NGOs", "USAID", "Programme GIPD", "Naatal Mbay Program"]
+    private_sector = ["Licensed Private Traders", "Unlicensed Wholesalers", "Retailers", "Village Rice Hullers", "Itinerant Traders", "Rice Millers", "Large Importers", "Private Operators", "Local Artisans"]
+
+    # Add nodes with colors based on category
+    for node in government_institutions:
+        G.add_node(node, color="#7C00FE", label=node)  # Tomato Red for government institutions
+
+    for node in financial_institutions:
+        G.add_node(node, color="#F9E400", label=node)  # Steel Blue for financial institutions
+
+    for node in research_institutions:
+        G.add_node(node, color="#FFAF00", label=node)  # Lime Green for research institutions
+
+    for node in farmer_organizations:
+        G.add_node(node, color="#06D001", label=node)  # Gold for farmer organizations
+
+    for node in ngos:
+        G.add_node(node, color="#EE4E4E", label=node)  # Hot Pink for NGOs
+
+    for node in private_sector:
+        G.add_node(node, color="#F5004F", label=node)  # BlueViolet for private sector entities
+
+    # Define the relationships (edges) between the nodes with labels
+    edges = [
+        ("Government of Senegal", "SAED", "manages"),
+        ("Government of Senegal", "CPSP", "oversees"),
+        ("Government of Senegal", "Controle Economique", "controls"),
+        ("SAED", "Smallholder Farmers", "supports"),
+        ("SAED", "Licensed Private Traders", "authorizes"),
+        ("CPSP", "Licensed Private Traders", "licenses"),
+        ("Licensed Private Traders", "Retailers", "sells to"),
+        ("Village Rice Hullers", "Itinerant Traders", "supplies"),
+        ("Itinerant Traders", "Unlicensed Wholesalers", "trades with"),
+        ("Retailers", "Consumers", "sells to"),
+        ("WARDA", "SAED", "collaborates with"),
+        ("WARDA", "Local Artisans", "works with"),
+        ("WARDA", "Farmer Organizations", "partners with"),
+        ("Farmers' Union", "Debi-Tiguet Farmers", "organizes"),
+        ("Japanese Government", "SAED", "funds"),
+        ("Mauritanian Government", "Smallholder Farmers", "supports"),
+        ("FAO", "Mauritanian Government", "advises"),
+        ("Local NGOs", "Smallholder Farmers", "assists"),
+        ("Extension Agents", "Debi-Tiguet Farmers", "trains"),
+        ("Debi-Tiguet Farmers", "Rice Millers", "supplies"),
+        ("Rice Millers", "Licensed Private Traders", "sells to"),
+        ("Farmer Organizations", "Smallholder Farmers", "supports"),
+        ("CASL", "Local Farmers", "employs"),
+        ("CASL", "Local Communities", "collaborates with"),
+        ("CASL", "AfDB", "funded by"),
+        ("CASL", "EIB", "funded by"),
+        ("Local NGOs", "CASL", "partners with"),
+        ("JICA", "AfricaRice", "supports"),
+        ("FAO", "AfricaRice", "funds"),
+        ("AfricaRice", "Smallholder Farmers", "advises"),
+        ("ISRA", "SAED", "collaborates with"),
+        ("ISRA", "Programme GIPD", "partners with"),
+        ("Programme GIPD", "Smallholder Farmers", "trains"),
+        ("University of California, Santa Cruz", "WARDA", "researches with"),
+        ("University of California, Santa Cruz", "ISRA", "collaborates with"),
+        ("FAO Global IPM Facility", "Programme GIPD", "supports"),
+        ("Naatal Mbay Program", "Maka Diama Producers Network", "collaborates with"),
+        ("Naatal Mbay Program", "CNCAS", "partners with"),
+        ("URAC", "ANACIM", "collaborates with"),
+        ("ANACIM", "Farmers", "provides data to"),
+        ("Village Organizations", "Smallholder Farmers", "organizes"),
+        ("Market-Oriented Organizations (MOs)", "Village Organizations", "supports"),
+        ("Community-Oriented Organizations (COs)", "Village Organizations", "assists"),
+        ("USAID", "Wula Nafaa", "funds"),
+        ("USAID", "Naatal Mbay Program", "funds"),
+        ("World Bank", "Village Organizations", "supports"),
+        ("Spanish Donors", "Naatal Mbay Program", "funds"),
+        ("Japanese Donors", "Naatal Mbay Program", "funds"),
+        ("CNCAS", "Smallholder Farmers", "provides loans to"),
+        ("CNCAS", "Rice Millers", "provides credit to"),
+        ("BCEAO", "Commercial Banks", "regulates"),
+        ("Commercial Banks", "Smallholder Farmers", "provides credit to"),
+        ("Commercial Banks", "Licensed Private Traders", "provides credit to")
+    ]
+
+    # Add edges with labels to the graph
+    for edge in edges:
+        source, target, label = edge
+        G.add_edge(source, target, label=label)
+
+    # Create a PyVis network with a white background
+    net = Network(notebook=False, directed=True, width="100%", height="1100px", bgcolor="white", font_color="black")#select_menu=True, filter_menu=True
+    net.from_nx(G)
+
+    # Customize the nodes further (e.g., increase font size)
+    for node in net.nodes:
+        node["shape"] = "circle"  # Ensures the node is a circle
+        node["size"] = 1 + G.degree(node["id"]) * 5  # Larger size for better visibility
+        node["font"] = {"size": 9, "color": "black", "align": "right"}  # Center the font inside the circle
+
+    # Customize the edges
+    for edge in net.edges:
+        edge["color"] = "#000000"  # Black color for edges
+        edge["title"] = G.edges[edge["from"], edge["to"]]["label"]  # Display the label as a tooltip
+        edge["label"] = G.edges[edge["from"], edge["to"]]["label"]  # Display the label on the edge
+        edge["font"] = {"size": 9}  # Increase font size for edge labels
+
+    # Add a title to the network map
+    net.set_options("""
+    var options = {
+      "nodes": {
+        "font": {
+          "size": 16
+        }
+      },
+      "layout": {
+        "hierarchical": false
+      },
+      "edges": {
+        "color": {
+          "color": "#000000"
+        },
+        "arrows": {
+          "to": {
+            "enabled": true
+          }
+        },
+        "smooth": {
+          "enabled": false
+        }
+      },
+      "physics": {
+        "enabled": true
+      },
+      "interaction": {
+        "tooltipDelay": 200,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+      },
+      "title": "Senegal Rice Value Chain Network"
+    }
+    """)
+    net.show_buttons(filter_=['physics'])
+   # Add a legend to the graph
+    legend_positions = {
+        "Government": ("Government of Senegal", "#7C00FE"),  # Updated to match the color used for government institutions
+        "Finance": ("CNCAS", "#F9E400"),  # Updated to match the color used for financial institutions
+        "Research": ("WARDA", "#FFAF00"),  # Updated to match the color used for research institutions
+        "Farmers": ("Smallholder Farmers", "#06D001"),  # Updated to match the color used for farmer organizations
+        "NGOs": ("Local NGOs", "#EE4E4E"),  # Updated to match the color used for NGOs
+        "Private Sector": ("Licensed Private Traders", "#F5004F")  # Updated to match the color used for private sector entities
+    }
+
+    for label, (example_node, color) in legend_positions.items():
+        net.add_node(label, label=f"Legend: {label}", color=color, size=10, x=-1000, y=-1000, shape="box", font={"size": 11})
+
+    print(f"Total unique stakeholders found: {len(G.nodes)}")
+    print(f"Total relationships found: {len(edges)}")
+
+    # Generate and save the network visualization
+    output_path = "senegal_rice_value_chain_network.html"
+    net.write_html(output_path)
+    #net.show(output_path)
+    
+    print(f"Network visualization saved to {output_path}")
+
+# Call the function to create and save the network
+create_stakeholder_network()
+
+```
+
+ ```{python}
+from pyvis.network import Network
+import networkx as nx
+
+def create_stakeholder_network():
+    # Initialize the directed graph
+    G = nx.DiGraph()
+
+    # Define stakeholder categories with corresponding colors
+    government_institutions = ["Government of Senegal", "CPSP", "Controle Economique", "Japanese Government", "Mauritanian Government"]
+    financial_institutions = ["CNCAS", "AfDB", "EIB", "BCEAO", "Commercial Banks", "World Bank", "Spanish Donors", "Japanese Donors"]
+    research_institutions = ["WARDA", "ISRA", "JICA", "AfricaRice", "University of California, Santa Cruz", "FAO Global IPM Facility"]
+    farmer_organizations = ["Smallholder Farmers", "Farmers' Union", "Debi-Tiguet Farmers", "Village Organizations", "Market-Oriented Organizations (MOs)", "Community-Oriented Organizations (COs)"]
+    ngos = ["Local NGOs", "USAID", "Programme GIPD", "Naatal Mbay Program"]
+    private_sector = ["Licensed Private Traders", "Unlicensed Wholesalers", "Retailers", "Village Rice Hullers", "Itinerant Traders", "Rice Millers", "Large Importers", "Private Operators", "Local Artisans"]
+
+    # Add nodes with colors based on category
+      # Add nodes with colors based on category
+    for node in government_institutions:
+        G.add_node(node, color="#7C00FE", label=node)  # Tomato Red for government institutions
+
+    for node in financial_institutions:
+        G.add_node(node, color="#F9E400", label=node)  # Steel Blue for financial institutions
+
+    for node in research_institutions:
+        G.add_node(node, color="#FFAF00", label=node)  # Lime Green for research institutions
+
+    for node in farmer_organizations:
+        G.add_node(node, color="#06D001", label=node)  # Gold for farmer organizations
+
+    for node in ngos:
+        G.add_node(node, color="#EE4E4E", label=node)  # Hot Pink for NGOs
+
+    for node in private_sector:
+        G.add_node(node, color="#F5004F", label=node)  # BlueViolet for private sector entities
+
+    # Define the relationships (edges) between the nodes with labels
+    edges = [
+        ("Government of Senegal", "SAED", "manages"),
+        ("Government of Senegal", "CPSP", "oversees"),
+        ("Government of Senegal", "Controle Economique", "controls"),
+        ("SAED", "Smallholder Farmers", "supports"),
+        ("SAED", "Licensed Private Traders", "authorizes"),
+        ("CPSP", "Licensed Private Traders", "licenses"),
+        ("Licensed Private Traders", "Retailers", "sells to"),
+        ("Village Rice Hullers", "Itinerant Traders", "supplies"),
+        ("Itinerant Traders", "Unlicensed Wholesalers", "trades with"),
+        ("Retailers", "Consumers", "sells to"),
+        ("WARDA", "SAED", "collaborates with"),
+        ("WARDA", "Local Artisans", "works with"),
+        ("WARDA", "Farmer Organizations", "partners with"),
+        ("Farmers' Union", "Debi-Tiguet Farmers", "organizes"),
+        ("Japanese Government", "SAED", "funds"),
+        ("Mauritanian Government", "Smallholder Farmers", "supports"),
+        ("FAO", "Mauritanian Government", "advises"),
+        ("Local NGOs", "Smallholder Farmers", "assists"),
+        ("Extension Agents", "Debi-Tiguet Farmers", "trains"),
+        ("Debi-Tiguet Farmers", "Rice Millers", "supplies"),
+        ("Rice Millers", "Licensed Private Traders", "sells to"),
+        ("Farmer Organizations", "Smallholder Farmers", "supports"),
+        ("CASL", "Local Farmers", "employs"),
+        ("CASL", "Local Communities", "collaborates with"),
+        ("CASL", "AfDB", "funded by"),
+        ("CASL", "EIB", "funded by"),
+        ("Local NGOs", "CASL", "partners with"),
+        ("JICA", "AfricaRice", "supports"),
+        ("FAO", "AfricaRice", "funds"),
+        ("AfricaRice", "Smallholder Farmers", "advises"),
+        ("ISRA", "SAED", "collaborates with"),
+        ("ISRA", "Programme GIPD", "partners with"),
+        ("Programme GIPD", "Smallholder Farmers", "trains"),
+        ("University of California, Santa Cruz", "WARDA", "researches with"),
+        ("University of California, Santa Cruz", "ISRA", "collaborates with"),
+        ("FAO Global IPM Facility", "Programme GIPD", "supports"),
+        ("Naatal Mbay Program", "Maka Diama Producers Network", "collaborates with"),
+        ("Naatal Mbay Program", "CNCAS", "partners with"),
+        ("URAC", "ANACIM", "collaborates with"),
+        ("ANACIM", "Farmers", "provides data to"),
+        ("Village Organizations", "Smallholder Farmers", "organizes"),
+        ("Market-Oriented Organizations (MOs)", "Village Organizations", "supports"),
+        ("Community-Oriented Organizations (COs)", "Village Organizations", "assists"),
+        ("USAID", "Wula Nafaa", "funds"),
+        ("USAID", "Naatal Mbay Program", "funds"),
+        ("World Bank", "Village Organizations", "supports"),
+        ("Spanish Donors", "Naatal Mbay Program", "funds"),
+        ("Japanese Donors", "Naatal Mbay Program", "funds"),
+        ("CNCAS", "Smallholder Farmers", "provides loans to"),
+        ("CNCAS", "Rice Millers", "provides credit to"),
+        ("BCEAO", "Commercial Banks", "regulates"),
+        ("Commercial Banks", "Smallholder Farmers", "provides credit to"),
+        ("Commercial Banks", "Licensed Private Traders", "provides credit to")
+    ]
+
+    # Add edges with labels to the graph
+    for edge in edges:
+        source, target, label = edge
+        G.add_edge(source, target, label=label)
+
+    # Create a PyVis network with a white background
+    net = Network(notebook=False, directed=True, width="100%", height="1200px", bgcolor="white", font_color="black")
+    net.from_nx(G)
+
+    # Customize the nodes further (e.g., increase font size)
+    for node in net.nodes:
+        node["shape"] = "circle"  # Ensures the node is a circle
+        node["size"] = 1 + G.degree(node["id"]) * 5  # Larger size for better visibility
+        node["font"] = {"size": 9, "color": "black", "align": "center"}  # Center the font inside the circle
+
+    # Customize the edges
+    for edge in net.edges:
+        edge["color"] = "#000000"  # Black color for edges
+        edge["title"] = G.edges[edge["from"], edge["to"]]["label"]  # Display the label as a tooltip
+        edge["label"] = G.edges[edge["from"], edge["to"]]["label"]  # Display the label on the edge
+        edge["font"] = {"size": 9}  # Increase font size for edge labels
+
+    # # Add a title to the network map
+    # net.set_options("""
+    # var options = {
+    #   "nodes": {
+    #     "font": {
+    #       "size": 16
+    #     }
+    #   },
+    #   "layout": {
+    #     "hierarchical": false
+    #   },
+    #   "edges": {
+    #     "color": {
+    #       "color": "#000000"
+    #     },
+    #     "arrows": {
+    #       "to": {
+    #         "enabled": true
+    #       }
+    #     },
+    #     "smooth": {
+    #       "enabled": false
+    #     }
+    #   },
+    #   "physics": {
+    #     "enabled": true
+    #   },
+    #   "interaction": {
+    #     "tooltipDelay": 200,
+    #     "hideEdgesOnDrag": false,
+    #     "hideNodesOnDrag": false
+    #   },
+    #   "title": "Senegal Rice Value Chain Network"
+    # }
+    # # """)
+    #net.show_buttons(filter_=['physics'])
+    # Add a legend to the graph
+    legend_positions = {
+      "Government": ("Government of Senegal", "#7C00FE"),  # Updated to match the color used for government institutions
+      "Finance": ("CNCAS", "#F9E400"),  # Updated to match the color used for financial institutions
+      "Research": ("WARDA", "#FFAF00"),  # Updated to match the color used for research institutions
+      "Farmers": ("Smallholder Farmers", "#06D001"),  # Updated to match the color used for farmer organizations
+      "NGOs": ("Local NGOs", "#EE4E4E"),  # Updated to match the color used for NGOs
+      "Private Sector": ("Licensed Private Traders", "#F5004F")  # Updated to match the color used for private sector entities
+    }
+
+    for label, (example_node, color) in legend_positions.items():
+        net.add_node(label, label=f"Legend: {label}", color=color, size=10, x=-1000, y=-1000, shape="box", font={"size": 11})
+
+    print(f"Total unique stakeholders found: {len(G.nodes)}")
+    print(f"Total relationships found: {len(edges)}")
+
+    # Generate and save the network visualization
+    output_path = "senegal_rice_value_chain_network.html"
+    net.write_html(output_path)
+    
+    print(f"Network visualization saved to {output_path}")
+
+# Call the function to create and save the network
+create_stakeholder_network()
+
+#network_html.show("network_html.html")
+```
+
+:::

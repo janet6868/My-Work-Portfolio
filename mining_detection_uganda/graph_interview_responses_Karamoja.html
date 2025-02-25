@@ -1,0 +1,163 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #eeeeee;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "LightSalmon", "id": "Karamoja", "label": "Karamoja", "shape": "circle"}, {"color": "LightSalmon", "id": "Karamoja region", "label": "Karamoja region", "shape": "circle"}, {"color": "#ffcc00", "id": "documentary", "label": "documentary", "shape": "circle"}, {"color": "#ffcc00", "id": "film", "label": "film", "shape": "circle"}, {"color": "#ffcc00", "id": "mining", "label": "mining", "shape": "circle"}, {"color": "#ffcc00", "id": "mineral exploration", "label": "mineral exploration", "shape": "circle"}, {"color": "#ffcc00", "id": "cattle wrestling", "label": "cattle wrestling", "shape": "circle"}, {"color": "#ffcc00", "id": "insecurity", "label": "insecurity", "shape": "circle"}, {"color": "#cccccc", "id": "mine these minerals", "label": "mine these minerals", "shape": "circle"}, {"color": "#cccccc", "id": "minerals", "label": "minerals", "shape": "circle"}, {"color": "#ffcc00", "id": "starving to death", "label": "starving to death", "shape": "circle"}, {"color": "#ffcc00", "id": "malnutrition", "label": "malnutrition", "shape": "circle"}, {"color": "#33F0FF", "id": "starvation", "label": "starvation", "shape": "circle"}, {"color": "#33F0FF", "id": "food security", "label": "food security", "shape": "circle"}, {"color": "#cccccc", "id": "miners", "label": "miners", "shape": "circle"}, {"color": "#ffcc00", "id": "artisanal miners", "label": "artisanal miners", "shape": "circle"}, {"color": "#ffcc00", "id": "Poverty", "label": "Poverty", "shape": "circle"}, {"color": "#ffcc00", "id": "poverty", "label": "poverty", "shape": "circle"}, {"color": "LightSalmon", "id": "Uganda", "label": "Uganda", "shape": "circle"}, {"color": "LightSalmon", "id": "presidential directive", "label": "presidential directive", "shape": "circle"}, {"color": "LightSalmon", "id": "Sunbelt", "label": "Sunbelt", "shape": "circle"}, {"color": "LightSalmon", "id": "Amudat", "label": "Amudat", "shape": "circle"}, {"color": "#CCCCFF", "id": "district", "label": "district", "shape": "circle"}, {"color": "#ffcc00", "id": "gold", "label": "gold", "shape": "circle"}, {"color": "LightSalmon", "id": "Tapach Sub County", "label": "Tapach Sub County", "shape": "circle"}, {"color": "LightSalmon", "id": "Morot", "label": "Morot", "shape": "circle"}, {"color": "LightSalmon", "id": "Tapach", "label": "Tapach", "shape": "circle"}, {"color": "LightSalmon", "id": "Moroto", "label": "Moroto", "shape": "circle"}, {"color": "LightSalmon", "id": "Moroto district", "label": "Moroto district", "shape": "circle"}, {"color": "LightSalmon", "id": "Nakapiripit", "label": "Nakapiripit", "shape": "circle"}, {"color": "LightSalmon", "id": "Amudat district", "label": "Amudat district", "shape": "circle"}, {"color": "LightSalmon", "id": "Teso", "label": "Teso", "shape": "circle"}, {"color": "LightSalmon", "id": "Lango", "label": "Lango", "shape": "circle"}, {"color": "LightSalmon", "id": "Turkana people", "label": "Turkana people", "shape": "circle"}, {"color": "LightSalmon", "id": "Kenya", "label": "Kenya", "shape": "circle"}, {"color": "#CCCCFF", "id": "Dodos", "label": "Dodos", "shape": "circle"}, {"color": "#CCCCFF", "id": "ethnic group", "label": "ethnic group", "shape": "circle"}, {"color": "#CCCCFF", "id": "Jie", "label": "Jie", "shape": "circle"}, {"color": "#CCCCFF", "id": "Bokora", "label": "Bokora", "shape": "circle"}, {"color": "#CCCCFF", "id": "Matheniko", "label": "Matheniko", "shape": "circle"}, {"color": "#CCCCFF", "id": "Pian", "label": "Pian", "shape": "circle"}, {"color": "LightSalmon", "id": "cattle raiding in Karamoja", "label": "cattle raiding in Karamoja", "shape": "circle"}, {"color": "LightSalmon", "id": "cattle raids", "label": "cattle raids", "shape": "circle"}, {"color": "#66ff99", "id": "irrigation schemes", "label": "irrigation schemes", "shape": "circle"}, {"color": "#66ff99", "id": "agriculture", "label": "agriculture", "shape": "circle"}, {"color": "#66ff99", "id": "irrigation", "label": "irrigation", "shape": "circle"}, {"color": "#66ff99", "id": "irrigation scheme", "label": "irrigation scheme", "shape": "circle"}, {"color": "#ffcc00", "id": "livelihood", "label": "livelihood", "shape": "circle"}, {"color": "#CCCCFF", "id": "coal", "label": "coal", "shape": "circle"}, {"color": "#CCCCFF", "id": "iron", "label": "iron", "shape": "circle"}, {"color": "#CCCCFF", "id": "cement", "label": "cement", "shape": "circle"}, {"color": "#CCCCFF", "id": "Clinker", "label": "Clinker", "shape": "circle"}, {"color": "#ffcc00", "id": "marble", "label": "marble", "shape": "circle"}, {"color": "#ffcc00", "id": "mineral", "label": "mineral", "shape": "circle"}, {"color": "#cccccc", "id": "John F. Kennedy School of Government", "label": "John F. Kennedy School of Government", "shape": "circle"}, {"color": "#cccccc", "id": "Harvard University", "label": "Harvard University", "shape": "circle"}, {"color": "#cccccc", "id": "John F. Kennedy", "label": "John F. Kennedy", "shape": "circle"}, {"color": "#cccccc", "id": "President", "label": "President", "shape": "circle"}, {"color": "#cccccc", "id": "the country", "label": "the country", "shape": "circle"}, {"color": "#cccccc", "id": "country", "label": "country", "shape": "circle"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Karamoja", "label": "located in the administrative territorial entity", "title": "located in the administrative territorial entity", "to": "Karamoja region"}, {"arrows": "to", "from": "documentary", "label": "subclass of", "title": "subclass of", "to": "film"}, {"arrows": "to", "from": "mining", "label": "subclass of", "title": "subclass of", "to": "mineral exploration"}, {"arrows": "to", "from": "cattle wrestling", "label": "subclass of", "title": "subclass of", "to": "insecurity"}, {"arrows": "to", "from": "mine these minerals", "label": "product or material produced", "title": "product or material produced", "to": "minerals"}, {"arrows": "to", "from": "mineral exploration", "label": "studies", "title": "studies", "to": "minerals"}, {"arrows": "to", "from": "minerals", "label": "studied by", "title": "studied by", "to": "mineral exploration"}, {"arrows": "to", "from": "starving to death", "label": "subclass of", "title": "subclass of", "to": "malnutrition"}, {"arrows": "to", "from": "starvation", "label": "facet of", "title": "facet of", "to": "food security"}, {"arrows": "to", "from": "starving to death", "label": "has cause", "title": "has cause", "to": "malnutrition"}, {"arrows": "to", "from": "mining", "label": "practiced by", "title": "practiced by", "to": "miners"}, {"arrows": "to", "from": "miners", "label": "field of this occupation", "title": "field of this occupation", "to": "mining"}, {"arrows": "to", "from": "artisanal miners", "label": "subclass of", "title": "subclass of", "to": "miners"}, {"arrows": "to", "from": "Poverty", "label": "subclass of", "title": "subclass of", "to": "poverty"}, {"arrows": "to", "from": "Poverty", "label": "facet of", "title": "facet of", "to": "poverty"}, {"arrows": "to", "from": "poverty", "label": "subclass of", "title": "subclass of", "to": "Poverty"}, {"arrows": "to", "from": "Karamoja", "label": "country", "title": "country", "to": "Uganda"}, {"arrows": "to", "from": "presidential directive", "label": "country", "title": "country", "to": "Uganda"}, {"arrows": "to", "from": "presidential directive", "label": "applies to jurisdiction", "title": "applies to jurisdiction", "to": "Uganda"}, {"arrows": "to", "from": "Sunbelt", "label": "country", "title": "country", "to": "Uganda"}, {"arrows": "to", "from": "Uganda", "label": "contains administrative territorial entity", "title": "contains administrative territorial entity", "to": "Karamoja"}, {"arrows": "to", "from": "Amudat", "label": "located in the administrative territorial entity", "title": "located in the administrative territorial entity", "to": "Karamoja"}, {"arrows": "to", "from": "Amudat", "label": "instance of", "title": "instance of", "to": "district"}, {"arrows": "to", "from": "gold", "label": "subclass of", "title": "subclass of", "to": "minerals"}, {"arrows": "to", "from": "Tapach Sub County", "label": "located in the administrative territorial entity", "title": "located in the administrative territorial entity", "to": "Morot"}, {"arrows": "to", "from": "Morot", "label": "contains administrative territorial entity", "title": "contains administrative territorial entity", "to": "Tapach Sub County"}, {"arrows": "to", "from": "Tapach", "label": "located in the administrative territorial entity", "title": "located in the administrative territorial entity", "to": "Morot"}, {"arrows": "to", "from": "Tapach Sub County", "label": "located in the administrative territorial entity", "title": "located in the administrative territorial entity", "to": "Moroto"}, {"arrows": "to", "from": "Tapach Sub County", "label": "located in the administrative territorial entity", "title": "located in the administrative territorial entity", "to": "Moroto district"}, {"arrows": "to", "from": "Amudat", "label": "country", "title": "country", "to": "Uganda"}, {"arrows": "to", "from": "Nakapiripit", "label": "country", "title": "country", "to": "Uganda"}, {"arrows": "to", "from": "Amudat district", "label": "located in the administrative territorial entity", "title": "located in the administrative territorial entity", "to": "Karamoja"}, {"arrows": "to", "from": "Teso", "label": "shares border with", "title": "shares border with", "to": "Lango"}, {"arrows": "to", "from": "Lango", "label": "shares border with", "title": "shares border with", "to": "Teso"}, {"arrows": "to", "from": "Karamoja", "label": "shares border with", "title": "shares border with", "to": "Lango"}, {"arrows": "to", "from": "Lango", "label": "shares border with", "title": "shares border with", "to": "Karamoja"}, {"arrows": "to", "from": "Teso", "label": "located in the administrative territorial entity", "title": "located in the administrative territorial entity", "to": "Lango"}, {"arrows": "to", "from": "Lango", "label": "contains administrative territorial entity", "title": "contains administrative territorial entity", "to": "Teso"}, {"arrows": "to", "from": "Turkana people", "label": "country", "title": "country", "to": "Kenya"}, {"arrows": "to", "from": "Kenya", "label": "shares border with", "title": "shares border with", "to": "Uganda"}, {"arrows": "to", "from": "Uganda", "label": "shares border with", "title": "shares border with", "to": "Kenya"}, {"arrows": "to", "from": "Kenya", "label": "ethnic group", "title": "ethnic group", "to": "Turkana people"}, {"arrows": "to", "from": "Dodos", "label": "instance of", "title": "instance of", "to": "ethnic group"}, {"arrows": "to", "from": "Jie", "label": "instance of", "title": "instance of", "to": "ethnic group"}, {"arrows": "to", "from": "Bokora", "label": "instance of", "title": "instance of", "to": "ethnic group"}, {"arrows": "to", "from": "Matheniko", "label": "instance of", "title": "instance of", "to": "ethnic group"}, {"arrows": "to", "from": "Pian", "label": "instance of", "title": "instance of", "to": "ethnic group"}, {"arrows": "to", "from": "cattle raiding in Karamoja", "label": "country", "title": "country", "to": "Uganda"}, {"arrows": "to", "from": "cattle raids", "label": "country", "title": "country", "to": "Uganda"}, {"arrows": "to", "from": "irrigation schemes", "label": "use", "title": "use", "to": "agriculture"}, {"arrows": "to", "from": "irrigation", "label": "use", "title": "use", "to": "agriculture"}, {"arrows": "to", "from": "irrigation scheme", "label": "use", "title": "use", "to": "agriculture"}, {"arrows": "to", "from": "mining", "label": "subclass of", "title": "subclass of", "to": "livelihood"}, {"arrows": "to", "from": "mining", "label": "instance of", "title": "instance of", "to": "livelihood"}, {"arrows": "to", "from": "coal", "label": "has part", "title": "has part", "to": "iron"}, {"arrows": "to", "from": "cement", "label": "has part", "title": "has part", "to": "Clinker"}, {"arrows": "to", "from": "Clinker", "label": "subclass of", "title": "subclass of", "to": "cement"}, {"arrows": "to", "from": "Clinker", "label": "use", "title": "use", "to": "cement"}, {"arrows": "to", "from": "artisanal miners", "label": "subclass of", "title": "subclass of", "to": "mining"}, {"arrows": "to", "from": "marble", "label": "subclass of", "title": "subclass of", "to": "mineral"}, {"arrows": "to", "from": "artisanal miners", "label": "field of this occupation", "title": "field of this occupation", "to": "mining"}, {"arrows": "to", "from": "Karamoja region", "label": "country", "title": "country", "to": "Uganda"}, {"arrows": "to", "from": "John F. Kennedy School of Government", "label": "part of", "title": "part of", "to": "Harvard University"}, {"arrows": "to", "from": "John F. Kennedy", "label": "position held", "title": "position held", "to": "President"}, {"arrows": "to", "from": "the country", "label": "different from", "title": "different from", "to": "country"}, {"arrows": "to", "from": "country", "label": "different from", "title": "different from", "to": "the country"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "repulsion": {
+            "centralGravity": 0.2,
+            "damping": 0.09,
+            "nodeDistance": 200,
+            "springConstant": 0.05,
+            "springLength": 200
+        },
+        "solver": "repulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

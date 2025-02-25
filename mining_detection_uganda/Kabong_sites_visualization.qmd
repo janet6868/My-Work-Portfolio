@@ -1,0 +1,277 @@
+---
+title: "Determining Mining Rates in Karamoja, Uganda"
+date: today
+date-format: long
+author: "Remote sensing team"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    page-layout: full
+    theme:
+          light: flatly
+          dark: darkly
+    number-sections: false
+    highlighting: true
+    smooth-scroll: true
+    highlighting-style: GitHub
+    self-contained: false
+execute:
+    echo: false
+    warning: false
+    enable: true
+
+title-block-banner: true
+---
+
+```{=html}
+<style type="text/css">
+
+h1.title {
+  font-size: 20px;
+  color: White;
+  text-align: center;
+}
+h4.author { /* Header 4 - and the author and data headers use this too  */
+    font-size: 16px;
+  font-family: "Source Sans Pro Semibold", Times, serif;
+  color: Red;
+  text-align: center;
+}
+h4.date { /* Header 4 - and the author and data headers use this too  */
+  font-size: 16px;
+  font-family: "Source Sans Pro Semibold", Times, serif;
+  color: Red;
+  text-align: center;
+}
+</style>
+```
+
+------------------------------------------------------------------------
+:::{.column-page}
+
+::: {style="text-align:center"}
+<h2>Classification of LULC using Sentinel 2 data</h2>
+:::
+
+</br>
+
+
+```{python}
+import os
+import re
+import glob
+import json
+import math
+from datetime import datetime
+from urllib.error import URLError
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+import matplotlib.dates as md
+from matplotlib.cm import get_cmap
+from matplotlib.dates import DateFormatter, DayLocator
+from matplotlib.colors import ListedColormap, BoundaryNorm, LinearSegmentedColormap
+from matplotlib.patches import Patch
+
+import plotly.express as px
+import plotly.figure_factory as ff
+import plotly.graph_objects as go
+import seaborn as sns
+
+import geopandas as gpd
+from shapely import wkt
+from shapely.geometry import Point, LineString, Polygon, box
+from shapely.wkt import loads
+
+import folium
+from folium.plugins import MarkerCluster
+
+import fiona
+import rasterio
+from rasterio import plot, mask
+from rasterio.warp import calculate_default_transform, reproject, Resampling
+from rasterio.features import shapes
+
+from rasterstats import zonal_stats
+from IPython.display import display, Markdown, HTML
+
+```
+
+## Visualizing the classification and RGBs
+### Kaboong sites
+
+```{python}
+import os
+import rasterio
+from rasterio.mask import mask
+import geopandas as gpd
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+from matplotlib.colors import ListedColormap
+from matplotlib.patches import Patch
+
+def analyze_sites(shapefile_path, new_values, site_names_to_analyze, years, seasons):
+    """
+    Analyze specified site names in the given shapefile and plot the RGB and classification images.
+
+    Parameters:
+    - shapefile_path: Path to the shapefile.
+    - new_values: Dictionary for mapping old site names to new descriptive names.
+    - site_names_to_analyze: List of site names to analyze.
+    - years: Range or list of years to process.
+    - seasons: List of seasons to process.
+    """
+    # Load the shapefile and extract names
+    shapefile = gpd.read_file(shapefile_path)
+
+    # Replace values in the 'Site' column
+    shapefile['Site'] = shapefile['Site'].replace(new_values)
+
+    # Extract geometry names
+    names = shapefile['Site']  # Ensure the 'Site' column exists
+
+    # Define class colors and labels
+    class_colors = {
+        0: 'white',  # nodata
+        1: 'grey',  # bare
+        2: 'red',  # built-up areas
+        3: 'orange',  # mining
+        4: 'blue',  # water
+        5: 'green'  # vegetation
+    }
+
+    class_labels = {
+        0: 'No Data',
+        1: 'Bare',
+        2: 'Built-up Areas',
+        3: 'Mining',
+        4: 'Water',
+        5: 'Vegetation'
+    }
+
+    # Create a custom colormap
+    cmap = ListedColormap([class_colors[i] for i in sorted(class_colors.keys())])
+
+    # Create legend handles
+    legend_handles = [Patch(color=class_colors[i], label=class_labels[i]) for i in sorted(class_colors.keys())]
+
+    # Iterate over each site
+    for index, (site_geometry, site_name) in enumerate(zip(shapefile.geometry, names)):
+        # Only analyze specified sites
+        if site_name not in site_names_to_analyze:
+            continue
+
+        # Prepare lists to store images for all years and seasons
+        site_rgb_images = {season: [] for season in seasons}
+        site_class_images = {season: [] for season in seasons}
+
+        # Iterate over each year and season
+        for year in years:
+            for season in seasons:
+                # Construct file paths for the current year and season
+                rgb_path = f'G:\\My Drive\\HEURISTICS\\Uganda_predictions\\new_mining_sites\\classification_v3\\clean_rgbs\\rgb_{year}_{season}.tiff'
+                classification_path = f'G:\\My Drive\\HEURISTICS\\Uganda_predictions\\new_mining_sites\\classification_v3\\Classified_{year}_{season}.tif'
+
+                # Check if the files exist
+                if not os.path.exists(rgb_path):
+                   # print(f"RGB file not found: {rgb_path}")
+                    continue
+                if not os.path.exists(classification_path):
+                    #print(f"Classification file not found: {classification_path}")
+                    continue
+
+                # Attempt to open the RGB and classification images
+                try:
+                    with rasterio.open(rgb_path) as rgb_src, rasterio.open(classification_path) as class_src:
+                        # Clip the RGB image
+                        out_rgb, out_rgb_transform = mask(rgb_src, [site_geometry], crop=True)
+                        # Normalize the clipped RGB image for display
+                        clipped_rgb = out_rgb.astype(np.float32) / np.max(out_rgb)
+                        site_rgb_images[season].append((clipped_rgb, year))
+
+                        # Clip the classification image
+                        out_class, out_class_transform = mask(class_src, [site_geometry], crop=True)
+                        site_class_images[season].append((out_class, year))
+
+                except rasterio.errors.RasterioIOError as e:
+                    #print(f"Error opening files for {site_name} - {year} - {season}: {e}")
+                    continue
+
+        # Plot each season for the current site
+        for season in seasons:
+            num_years = len(site_rgb_images[season])
+            if num_years == 0:
+                continue
+
+            # Calculate number of rows needed for 3 plots per row
+            num_rows = int(np.ceil(num_years / 3))
+
+            fig, axes = plt.subplots(num_rows * 2, 3, figsize=(15, num_rows * 10), dpi=500)  # Increase figure size
+
+            for i, ((clipped_rgb, year), (clipped_class, _)) in enumerate(zip(site_rgb_images[season], site_class_images[season])):
+                row = (i // 3) * 2
+                col = i % 3
+                
+                # Plot the RGB image
+                axes[row, col].imshow(clipped_rgb.transpose(1, 2, 0))
+                axes[row, col].axis('off')
+                axes[row, col].set_title(f'RGB - {site_name} ({year} - {season})', fontsize=16)  # Increased font size
+
+                # Plot the classification image with seaborn heatmap
+                sns.heatmap(
+                    clipped_class[0],
+                    cmap=cmap,
+                    vmin=0,
+                    vmax=len(class_colors),
+                    ax=axes[row + 1, col],
+                    cbar=False,
+                    square=True
+                )
+                axes[row + 1, col].set_title(f'Classification - {site_name} ({year} - {season})', fontsize=16)  # Increased font size
+                axes[row + 1, col].axis('off')
+
+            # Hide any unused subplots
+            for j in range(i + 1, num_rows * 3):
+                row = (j // 3) * 2
+                col = j % 3
+                axes[row, col].axis('off')
+                axes[row + 1, col].axis('off')
+
+            # Add a legend below the classification plots
+            fig.legend(handles=legend_handles, loc='lower center', bbox_to_anchor=(0.5, -0.05), ncol=3, fontsize=14)
+
+            plt.tight_layout(pad=1.0)
+            plt.suptitle(f'Site: {site_name} - Season: {season.capitalize()}', fontsize=18, y=1.02)
+            plt.show()
+
+# Example usage:
+shapefile_path = r'G:\My Drive\HEURISTICS\Uganda_predictions\new_mining_sites\Mining_Buffered\Mining_Buffered.shp'
+new_values = {
+    'Kaabong1': 'Kaboong_site_one',
+    'Kaabong2': 'Kaboong_site_two',
+    'Moroto1': 'Moroto_site_one',
+    'Moroto2': 'Moroto_site_two',
+    'Moroto3': 'Moroto_site_three',
+    'Nakapiripirit1': 'Nakapiripirit_site_one',
+    'Nakapiripirit2': 'Nakapiripirit_site_two',
+    'Amudat1': 'Amudat_site_one',
+    'Amudat2': 'Amudat_site_two'
+}
+
+# Define the years and seasons
+years = range(2017, 2024)
+seasons = ['dry', 'rainy','year']
+# Specify the sites you want to analyze
+kaboong_sites = ['Kaboong_site_one', 'Kaboong_site_two']
+
+# Call the function
+analyze_sites(shapefile_path, new_values, kaboong_sites, years, seasons)
+
+```
+
+:::

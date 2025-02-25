@@ -1,0 +1,185 @@
+---
+title: "Determining Mining Rates in Karamoja, Uganda"
+date: today
+date-format: long
+author: "Remote sensing team"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    page-layout: full
+    theme:
+          light: flatly
+          dark: darkly
+    number-sections: false
+    highlighting: true
+    smooth-scroll: true
+    highlighting-style: github
+    self-contained: false
+execute:
+    echo: false
+    warning: false
+    enable: true
+
+title-block-banner: true
+---
+
+```{=html}
+<style type="text/css">
+
+h1.title {
+  font-size: 20px;
+  color: White;
+  text-align: center;
+}
+h4.author { /* Header 4 - and the author and data headers use this too  */
+    font-size: 16px;
+  font-family: "Source Sans Pro Semibold", Times, serif;
+  color: Red;
+  text-align: center;
+}
+h4.date { /* Header 4 - and the author and data headers use this too  */
+  font-size: 16px;
+  font-family: "Source Sans Pro Semibold", Times, serif;
+  color: Red;
+  text-align: center;
+}
+</style>
+```
+
+------------------------------------------------------------------------
+:::{.column-page}
+
+::: {style="text-align:center"}
+<h2>Classification of LULC</h2>
+:::
+
+</br>
+
+The results in this presentation are from two classification versions: One using Sentinel 2 from 2017 to 2023 and one using landsat 8 data for years 2015, 2020 and 2023.
+
+
+::: {.panel-tabset}
+
+### Field data
+::: {.justify}
+The field data below is used to determine the mining sites to be used. These are the mining sites and FGD sites shared by Nargiza et al. 
+:::
+
+```{python}
+import pandas as pd
+from urllib.error import URLError
+import numpy as np
+import matplotlib.pyplot as plt
+import plotly.express as px
+import plotly.figure_factory as ff
+import plotly.graph_objects as go
+import seaborn as sns
+import geopandas as gpd
+import fiona
+import os
+#os.environ['PYTHONENV'] = 'bulletin'
+import re
+import glob
+import folium
+import matplotlib
+%matplotlib inline
+import rasterio
+import matplotlib.dates as md
+from datetime import datetime
+from dateutil import parser
+from shapely import wkt
+from shapely.geometry import Point, LineString, Polygon, box
+from matplotlib.dates import DateFormatter, DayLocator
+from matplotlib.colors import ListedColormap,  BoundaryNorm
+from rasterio import plot
+from rasterio.plot import show
+from IPython.display import display, Markdown, HTML
+from folium.plugins import MarkerCluster
+from shapely.wkt import loads
+from matplotlib.patches import Patch
+import json
+from IPython.display import display, Markdown
+import matplotlib.pyplot as plt
+from datetime import datetime
+from matplotlib.dates import DateFormatter, DayLocator
+from shapely import wkt
+import rasterio as rio
+from rasterio.warp import calculate_default_transform, reproject, Resampling
+import matplotlib.colors as mcolors
+import math
+from rasterio import plot
+import rasterio as rio
+from rasterio.plot import show
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
+import rasterio
+from rasterio.mask import mask
+from shapely.geometry import mapping
+from rasterstats import zonal_stats
+import folium
+import fiona
+from rasterio.features import shapes
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+import rasterio
+import math
+import os
+
+%matplotlib inline
+
+```
+
+```{python}
+# Provide the path to your shapefile
+shapefile_path = "current_data/field_gps.geojson"
+
+# Read the shapefile using GeoPandas
+data = gpd.read_file(shapefile_path)
+
+html_table = data.to_html(index=True)
+
+# Wrap in a scrollable div
+scrollable_table = f"""
+<div style="height: 400px; width: 100%; overflow-x: auto; overflow-y: auto;">
+    {html_table}
+</div>
+"""
+# Display the scrollable table
+display(HTML(scrollable_table))
+```
+
+```{python}
+timeline_analysis_ = "Note:\n\n"
+timeline_analysis_ += "- Based on the above provided data, we aggregate information from nine mining sites. We create a 5km buffer around each site, defining these regions as the areas of interest for the classification process.The geometry in the data below is the 5km buffer geometries.\n\n"
+# Display the timeline analysis
+display(Markdown(timeline_analysis_))
+
+
+buffer_data = gpd.read_file('Mining_Buffered/Mining_Buffered.shp')
+# Generate unique IDs for each feature
+unique_ids = ['Min_site' + str(i) for i in range(1, len(buffer_data) + 1)]
+# Assign the unique IDs to the 'mining_site_id' column
+buffer_data['mining_site_id'] = unique_ids
+
+html_table = buffer_data.to_html(index=True)
+
+# Wrap in a scrollable div
+scrollable_table = f"""
+<div style="height: 400px; width: 100%; overflow-x: auto; overflow-y: auto;">
+    {html_table}
+</div>
+"""
+# Display the scrollable table
+display(HTML(scrollable_table))
+```
+
+
+::: {.callout-tip}
+Classification output:
+1. Latest version using [Sentinel 2](https://janet68.quarto.pub/karamoja-sentinel-2-classification/)
+
+2. First version using [Landsat 8](https://janet68.quarto.pub/karamoja_landsat_classification/)
+
+:::

@@ -1,0 +1,2656 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Remote sensing team">
+<meta name="dcterms.date" content="2024-08-03">
+
+<title>Determining Mining Rates in Karamoja, Uganda</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="mining_rates_karamoja_files/libs/clipboard/clipboard.min.js"></script>
+<script src="mining_rates_karamoja_files/libs/quarto-html/quarto.js"></script>
+<script src="mining_rates_karamoja_files/libs/quarto-html/popper.min.js"></script>
+<script src="mining_rates_karamoja_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="mining_rates_karamoja_files/libs/quarto-html/anchor.min.js"></script>
+<link href="mining_rates_karamoja_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="mining_rates_karamoja_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="mining_rates_karamoja_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="mining_rates_karamoja_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="mining_rates_karamoja_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="mining_rates_karamoja_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="mining_rates_karamoja_files/libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<style>html{ scroll-behavior: smooth; }</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body>
+
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-page-right">
+      <h1 class="title">Determining Mining Rates in Karamoja, Uganda</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta column-page-right">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Remote sensing team </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">August 3, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="page-columns page-rows-contents page-layout-full toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#field-data" id="toc-field-data" class="nav-link active" data-scroll-target="#field-data">Field data</a></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+</div>
+<main class="content quarto-banner-title-block column-page-right" id="quarto-document-content">
+
+
+
+
+
+<style type="text/css">
+
+h1.title {
+  font-size: 20px;
+  color: White;
+  text-align: center;
+}
+h4.author { /* Header 4 - and the author and data headers use this too  */
+    font-size: 16px;
+  font-family: "Source Sans Pro Semibold", Times, serif;
+  color: Red;
+  text-align: center;
+}
+h4.date { /* Header 4 - and the author and data headers use this too  */
+  font-size: 16px;
+  font-family: "Source Sans Pro Semibold", Times, serif;
+  color: Red;
+  text-align: center;
+}
+</style>
+<hr>
+<p>:::{.column-page}</p>
+<div style="text-align:center">
+<h2 class="anchored">
+Classification of LULC
+</h2>
+</div>
+<p><br></p>
+<p>The results in this presentation are from two classification versions: One using Sentinel 2 from 2017 to 2023 and one using landsat 8 data for years 2015, 2020 and 2023.</p>
+<p>::: {.panel-tabset}</p>
+<section id="field-data" class="level3">
+<h3 class="anchored" data-anchor-id="field-data">Field data</h3>
+<div class="justify">
+<p>The field data below is used to determine the mining sites to be used. These are the mining sites and FGD sites shared by Nargiza et al.&nbsp;</p>
+</div>
+<div id="74db7f16" class="cell" data-execution_count="2">
+<div class="cell-output cell-output-display">
+<div>
+
+<div style="height: 400px; width: 100%; overflow-x: auto; overflow-y: auto;">
+    
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">FGD_type</th>
+<th data-quarto-table-cell-role="th">FGD_ID</th>
+<th data-quarto-table-cell-role="th">District</th>
+<th data-quarto-table-cell-role="th">Mining_site_GPS</th>
+<th data-quarto-table-cell-role="th">FGD_GPS</th>
+<th data-quarto-table-cell-role="th">Latitude</th>
+<th data-quarto-table-cell-role="th">Longitude</th>
+<th data-quarto-table-cell-role="th">geometry</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Women</td>
+<td>UGA0001</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.3157N; 34.1618E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Women</td>
+<td>UGA0001</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.3157N; 34.1618E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Women</td>
+<td>UGA0001</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.3157N; 34.1618E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Women</td>
+<td>UGA0001</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.3157N; 34.1618E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Women</td>
+<td>UGA0001</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.3157N; 34.1618E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>Women</td>
+<td>UGA0001</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.3157N; 34.1618E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>Women</td>
+<td>UGA0001</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.3157N; 34.1618E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>Women</td>
+<td>UGA0001</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.3157N; 34.1618E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>Women</td>
+<td>UGA0001</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.3157N; 34.1618E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>Women</td>
+<td>UGA0001</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.3157N; 34.1618E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>Women</td>
+<td>UGA0001</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.3157N; 34.1618E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">11</td>
+<td>Women</td>
+<td>UGA0001</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.3157N; 34.1618E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12</td>
+<td>Women</td>
+<td>UGA0002</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">13</td>
+<td>Women</td>
+<td>UGA0002</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">14</td>
+<td>Women</td>
+<td>UGA0002</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">15</td>
+<td>Women</td>
+<td>UGA0002</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16</td>
+<td>Women</td>
+<td>UGA0002</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17</td>
+<td>Women</td>
+<td>UGA0002</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">18</td>
+<td>Women</td>
+<td>UGA0002</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">19</td>
+<td>Women</td>
+<td>UGA0002</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20</td>
+<td>Women</td>
+<td>UGA0002</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">21</td>
+<td>Women</td>
+<td>UGA0002</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">22</td>
+<td>Women</td>
+<td>UGA0002</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">23</td>
+<td>Women</td>
+<td>UGA0002</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">24</td>
+<td>Men</td>
+<td>UGA0003</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">25</td>
+<td>Men</td>
+<td>UGA0003</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26</td>
+<td>Men</td>
+<td>UGA0003</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">27</td>
+<td>Men</td>
+<td>UGA0003</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">28</td>
+<td>Men</td>
+<td>UGA0003</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">29</td>
+<td>Men</td>
+<td>UGA0003</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">30</td>
+<td>Men</td>
+<td>UGA0003</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">31</td>
+<td>Men</td>
+<td>UGA0003</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">32</td>
+<td>Men</td>
+<td>UGA0003</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">33</td>
+<td>Men</td>
+<td>UGA0003</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">34</td>
+<td>Men</td>
+<td>UGA0003</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">35</td>
+<td>Men</td>
+<td>UGA0003</td>
+<td>Moroto</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936N;\n34.845722E</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POINT (34.84572 2.40594)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">36</td>
+<td>Mixed</td>
+<td>UGA0004</td>
+<td>Moroto</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031</td>
+<td>34.662469</td>
+<td>POINT (34.66247 2.65003)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">37</td>
+<td>Mixed</td>
+<td>UGA0004</td>
+<td>Moroto</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031</td>
+<td>34.662469</td>
+<td>POINT (34.66247 2.65003)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">38</td>
+<td>Mixed</td>
+<td>UGA0004</td>
+<td>Moroto</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031</td>
+<td>34.662469</td>
+<td>POINT (34.66247 2.65003)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">39</td>
+<td>Mixed</td>
+<td>UGA0004</td>
+<td>Moroto</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031</td>
+<td>34.662469</td>
+<td>POINT (34.66247 2.65003)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">40</td>
+<td>Mixed</td>
+<td>UGA0004</td>
+<td>Moroto</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031</td>
+<td>34.662469</td>
+<td>POINT (34.66247 2.65003)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">41</td>
+<td>Mixed</td>
+<td>UGA0004</td>
+<td>Moroto</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031</td>
+<td>34.662469</td>
+<td>POINT (34.66247 2.65003)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">42</td>
+<td>Mixed</td>
+<td>UGA0004</td>
+<td>Moroto</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031</td>
+<td>34.662469</td>
+<td>POINT (34.66247 2.65003)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">43</td>
+<td>Mixed</td>
+<td>UGA0004</td>
+<td>Moroto</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031</td>
+<td>34.662469</td>
+<td>POINT (34.66247 2.65003)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">44</td>
+<td>Mixed</td>
+<td>UGA0004</td>
+<td>Moroto</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031</td>
+<td>34.662469</td>
+<td>POINT (34.66247 2.65003)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">45</td>
+<td>Mixed</td>
+<td>UGA0004</td>
+<td>Moroto</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031N;\n34.662469E</td>
+<td>2.650031</td>
+<td>34.662469</td>
+<td>POINT (34.66247 2.65003)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">46</td>
+<td>Mixed</td>
+<td>UGA0005</td>
+<td>Nakapiripirit</td>
+<td>2.03N;\n34.4255E</td>
+<td>2.454N; 34.378E</td>
+<td>2.030000</td>
+<td>34.425500</td>
+<td>POINT (34.42550 2.03000)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">47</td>
+<td>Mixed</td>
+<td>UGA0005</td>
+<td>Nakapiripirit</td>
+<td>2.03N;\n34.4255E</td>
+<td>2.454N; 34.378E</td>
+<td>2.030000</td>
+<td>34.425500</td>
+<td>POINT (34.42550 2.03000)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">48</td>
+<td>Mixed</td>
+<td>UGA0005</td>
+<td>Nakapiripirit</td>
+<td>2.03N;\n34.4255E</td>
+<td>2.454N; 34.378E</td>
+<td>2.030000</td>
+<td>34.425500</td>
+<td>POINT (34.42550 2.03000)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">49</td>
+<td>Mixed</td>
+<td>UGA0005</td>
+<td>Nakapiripirit</td>
+<td>2.03N;\n34.4255E</td>
+<td>2.454N; 34.378E</td>
+<td>2.030000</td>
+<td>34.425500</td>
+<td>POINT (34.42550 2.03000)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">50</td>
+<td>Mixed</td>
+<td>UGA0005</td>
+<td>Nakapiripirit</td>
+<td>2.03N;\n34.4255E</td>
+<td>2.454N; 34.378E</td>
+<td>2.030000</td>
+<td>34.425500</td>
+<td>POINT (34.42550 2.03000)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">51</td>
+<td>Mixed</td>
+<td>UGA0005</td>
+<td>Nakapiripirit</td>
+<td>2.03N;\n34.4255E</td>
+<td>2.454N; 34.378E</td>
+<td>2.030000</td>
+<td>34.425500</td>
+<td>POINT (34.42550 2.03000)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">52</td>
+<td>Mixed</td>
+<td>UGA0005</td>
+<td>Nakapiripirit</td>
+<td>2.03N;\n34.4255E</td>
+<td>2.454N; 34.378E</td>
+<td>2.030000</td>
+<td>34.425500</td>
+<td>POINT (34.42550 2.03000)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">53</td>
+<td>Mixed</td>
+<td>UGA0005</td>
+<td>Nakapiripirit</td>
+<td>2.03N;\n34.4255E</td>
+<td>2.454N; 34.378E</td>
+<td>2.030000</td>
+<td>34.425500</td>
+<td>POINT (34.42550 2.03000)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">54</td>
+<td>Mixed</td>
+<td>UGA0005</td>
+<td>Nakapiripirit</td>
+<td>2.03N;\n34.4255E</td>
+<td>2.454N; 34.378E</td>
+<td>2.030000</td>
+<td>34.425500</td>
+<td>POINT (34.42550 2.03000)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">55</td>
+<td>Mixed</td>
+<td>UGA0005</td>
+<td>Nakapiripirit</td>
+<td>2.03N;\n34.4255E</td>
+<td>2.454N; 34.378E</td>
+<td>2.030000</td>
+<td>34.425500</td>
+<td>POINT (34.42550 2.03000)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">56</td>
+<td>Mixed</td>
+<td>UGA0005</td>
+<td>Nakapiripirit</td>
+<td>2.03N;\n34.4255E</td>
+<td>2.454N; 34.378E</td>
+<td>2.030000</td>
+<td>34.425500</td>
+<td>POINT (34.42550 2.03000)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">57</td>
+<td>Mixed</td>
+<td>UGA0005</td>
+<td>Nakapiripirit</td>
+<td>2.03N;\n34.4255E</td>
+<td>2.454N; 34.378E</td>
+<td>2.030000</td>
+<td>34.425500</td>
+<td>POINT (34.42550 2.03000)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">58</td>
+<td>Mixed</td>
+<td>UGA0005</td>
+<td>Nakapiripirit</td>
+<td>2.03N;\n34.4255E</td>
+<td>2.454N; 34.378E</td>
+<td>2.030000</td>
+<td>34.425500</td>
+<td>POINT (34.42550 2.03000)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">59</td>
+<td>Men</td>
+<td>UGA0006</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">60</td>
+<td>Men</td>
+<td>UGA0006</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">61</td>
+<td>Men</td>
+<td>UGA0006</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">62</td>
+<td>Men</td>
+<td>UGA0006</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">63</td>
+<td>Men</td>
+<td>UGA0006</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">64</td>
+<td>Men</td>
+<td>UGA0006</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">65</td>
+<td>Men</td>
+<td>UGA0006</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">66</td>
+<td>Men</td>
+<td>UGA0006</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">67</td>
+<td>Men</td>
+<td>UGA0006</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">68</td>
+<td>Men</td>
+<td>UGA0006</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">69</td>
+<td>Men</td>
+<td>UGA0006</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">70</td>
+<td>Men</td>
+<td>UGA0006</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">71</td>
+<td>Mixed</td>
+<td>UGA0007</td>
+<td>Kaabong</td>
+<td>3.650640N;\n34.308850E</td>
+<td>3.65074N 34.30896E</td>
+<td>3.650640</td>
+<td>34.308850</td>
+<td>POINT (34.30885 3.65064)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">72</td>
+<td>Mixed</td>
+<td>UGA0007</td>
+<td>Kaabong</td>
+<td>3.650640N;\n34.308850E</td>
+<td>3.65074N 34.30896E</td>
+<td>3.650640</td>
+<td>34.308850</td>
+<td>POINT (34.30885 3.65064)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">73</td>
+<td>Mixed</td>
+<td>UGA0007</td>
+<td>Kaabong</td>
+<td>3.650640N;\n34.308850E</td>
+<td>3.65074N 34.30896E</td>
+<td>3.650640</td>
+<td>34.308850</td>
+<td>POINT (34.30885 3.65064)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">74</td>
+<td>Mixed</td>
+<td>UGA0007</td>
+<td>Kaabong</td>
+<td>3.650640N;\n34.308850E</td>
+<td>3.65074N 34.30896E</td>
+<td>3.650640</td>
+<td>34.308850</td>
+<td>POINT (34.30885 3.65064)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">75</td>
+<td>Mixed</td>
+<td>UGA0007</td>
+<td>Kaabong</td>
+<td>3.650640N;\n34.308850E</td>
+<td>3.65074N 34.30896E</td>
+<td>3.650640</td>
+<td>34.308850</td>
+<td>POINT (34.30885 3.65064)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">76</td>
+<td>Mixed</td>
+<td>UGA0007</td>
+<td>Kaabong</td>
+<td>3.650640N;\n34.308850E</td>
+<td>3.65074N 34.30896E</td>
+<td>3.650640</td>
+<td>34.308850</td>
+<td>POINT (34.30885 3.65064)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">77</td>
+<td>Mixed</td>
+<td>UGA0007</td>
+<td>Kaabong</td>
+<td>3.650640N;\n34.308850E</td>
+<td>3.65074N 34.30896E</td>
+<td>3.650640</td>
+<td>34.308850</td>
+<td>POINT (34.30885 3.65064)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">78</td>
+<td>Mixed</td>
+<td>UGA0007</td>
+<td>Kaabong</td>
+<td>3.650640N;\n34.308850E</td>
+<td>3.65074N 34.30896E</td>
+<td>3.650640</td>
+<td>34.308850</td>
+<td>POINT (34.30885 3.65064)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">79</td>
+<td>Mixed</td>
+<td>UGA0007</td>
+<td>Kaabong</td>
+<td>3.650640N;\n34.308850E</td>
+<td>3.65074N 34.30896E</td>
+<td>3.650640</td>
+<td>34.308850</td>
+<td>POINT (34.30885 3.65064)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">80</td>
+<td>Mixed</td>
+<td>UGA0007</td>
+<td>Kaabong</td>
+<td>3.650640N;\n34.308850E</td>
+<td>3.65074N 34.30896E</td>
+<td>3.650640</td>
+<td>34.308850</td>
+<td>POINT (34.30885 3.65064)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">81</td>
+<td>Mixed</td>
+<td>UGA0007</td>
+<td>Kaabong</td>
+<td>3.650640N;\n34.308850E</td>
+<td>3.65074N 34.30896E</td>
+<td>3.650640</td>
+<td>34.308850</td>
+<td>POINT (34.30885 3.65064)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">82</td>
+<td>Mixed</td>
+<td>UGA0007</td>
+<td>Kaabong</td>
+<td>3.650640N;\n34.308850E</td>
+<td>3.65074N 34.30896E</td>
+<td>3.650640</td>
+<td>34.308850</td>
+<td>POINT (34.30885 3.65064)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">83</td>
+<td>Women</td>
+<td>UGA0008</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">84</td>
+<td>Women</td>
+<td>UGA0008</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">85</td>
+<td>Women</td>
+<td>UGA0008</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">86</td>
+<td>Women</td>
+<td>UGA0008</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">87</td>
+<td>Women</td>
+<td>UGA0008</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">88</td>
+<td>Women</td>
+<td>UGA0008</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">89</td>
+<td>Women</td>
+<td>UGA0008</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">90</td>
+<td>Women</td>
+<td>UGA0008</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">91</td>
+<td>Women</td>
+<td>UGA0008</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">92</td>
+<td>Women</td>
+<td>UGA0008</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">93</td>
+<td>Women</td>
+<td>UGA0008</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">94</td>
+<td>Women</td>
+<td>UGA0008</td>
+<td>Nakapiripirit</td>
+<td>1.92073N;\n34.56180E</td>
+<td>1.5531N; 34.3343E</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POINT (34.56180 1.92073)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">95</td>
+<td>Women</td>
+<td>UGA0009</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">96</td>
+<td>Women</td>
+<td>UGA0009</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">97</td>
+<td>Women</td>
+<td>UGA0009</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">98</td>
+<td>Women</td>
+<td>UGA0009</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">99</td>
+<td>Women</td>
+<td>UGA0009</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">100</td>
+<td>Women</td>
+<td>UGA0009</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">101</td>
+<td>Women</td>
+<td>UGA0009</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">102</td>
+<td>Women</td>
+<td>UGA0009</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">103</td>
+<td>Women</td>
+<td>UGA0009</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">104</td>
+<td>Women</td>
+<td>UGA0009</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">105</td>
+<td>Women</td>
+<td>UGA0009</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">106</td>
+<td>Women</td>
+<td>UGA0009</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">107</td>
+<td>Mixed</td>
+<td>UGA0010</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">108</td>
+<td>Mixed</td>
+<td>UGA0010</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">109</td>
+<td>Mixed</td>
+<td>UGA0010</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">110</td>
+<td>Mixed</td>
+<td>UGA0010</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">111</td>
+<td>Mixed</td>
+<td>UGA0010</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">112</td>
+<td>Mixed</td>
+<td>UGA0010</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">113</td>
+<td>Mixed</td>
+<td>UGA0010</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">114</td>
+<td>Mixed</td>
+<td>UGA0010</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">115</td>
+<td>Mixed</td>
+<td>UGA0010</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">116</td>
+<td>Mixed</td>
+<td>UGA0010</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">117</td>
+<td>Mixed</td>
+<td>UGA0010</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">118</td>
+<td>Mixed</td>
+<td>UGA0010</td>
+<td>Moroto</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147N;\n34.677553E</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POINT (34.67755 2.58515)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">119</td>
+<td>Men</td>
+<td>UGA0011</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.53253N; 34.27171E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">120</td>
+<td>Men</td>
+<td>UGA0011</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.53253N; 34.27171E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">121</td>
+<td>Men</td>
+<td>UGA0011</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.53253N; 34.27171E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">122</td>
+<td>Men</td>
+<td>UGA0011</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.53253N; 34.27171E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">123</td>
+<td>Men</td>
+<td>UGA0011</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.53253N; 34.27171E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">124</td>
+<td>Men</td>
+<td>UGA0011</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.53253N; 34.27171E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">125</td>
+<td>Men</td>
+<td>UGA0011</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.53253N; 34.27171E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">126</td>
+<td>Men</td>
+<td>UGA0011</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.53253N; 34.27171E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">127</td>
+<td>Men</td>
+<td>UGA0011</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.53253N; 34.27171E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">128</td>
+<td>Men</td>
+<td>UGA0011</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.53253N; 34.27171E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">129</td>
+<td>Men</td>
+<td>UGA0011</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.53253N; 34.27171E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">130</td>
+<td>Men</td>
+<td>UGA0011</td>
+<td>Kaabong</td>
+<td>3.53269N;\n34.27366E</td>
+<td>3.53253N; 34.27171E</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POINT (34.27366 3.53269)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">131</td>
+<td>Men</td>
+<td>UGA0012</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">132</td>
+<td>Men</td>
+<td>UGA0012</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">133</td>
+<td>Men</td>
+<td>UGA0012</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">134</td>
+<td>Men</td>
+<td>UGA0012</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">135</td>
+<td>Men</td>
+<td>UGA0012</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">136</td>
+<td>Men</td>
+<td>UGA0012</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">137</td>
+<td>Men</td>
+<td>UGA0012</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">138</td>
+<td>Men</td>
+<td>UGA0012</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">139</td>
+<td>Men</td>
+<td>UGA0012</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">140</td>
+<td>Men</td>
+<td>UGA0012</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">141</td>
+<td>Men</td>
+<td>UGA0012</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">142</td>
+<td>Men</td>
+<td>UGA0012</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">143</td>
+<td>Women</td>
+<td>UGA0013</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">144</td>
+<td>Women</td>
+<td>UGA0013</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">145</td>
+<td>Women</td>
+<td>UGA0013</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">146</td>
+<td>Women</td>
+<td>UGA0013</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">147</td>
+<td>Women</td>
+<td>UGA0013</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">148</td>
+<td>Women</td>
+<td>UGA0013</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">149</td>
+<td>Women</td>
+<td>UGA0013</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">150</td>
+<td>Women</td>
+<td>UGA0013</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">151</td>
+<td>Women</td>
+<td>UGA0013</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">152</td>
+<td>Women</td>
+<td>UGA0013</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">153</td>
+<td>Women</td>
+<td>UGA0013</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">154</td>
+<td>Women</td>
+<td>UGA0013</td>
+<td>Amudat</td>
+<td>1.450433N;\n34.787715E</td>
+<td>1.450561N; 34.704139E</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POINT (34.78771 1.45043)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">155</td>
+<td>Mixed</td>
+<td>UGA0014</td>
+<td>Amudat</td>
+<td>1.925211N;\n34.954624E</td>
+<td>1.92511N 34.954624E</td>
+<td>1.925211</td>
+<td>34.954624</td>
+<td>POINT (34.95462 1.92521)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">156</td>
+<td>Mixed</td>
+<td>UGA0014</td>
+<td>Amudat</td>
+<td>1.925211N;\n34.954624E</td>
+<td>1.92511N 34.954624E</td>
+<td>1.925211</td>
+<td>34.954624</td>
+<td>POINT (34.95462 1.92521)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">157</td>
+<td>Mixed</td>
+<td>UGA0014</td>
+<td>Amudat</td>
+<td>1.925211N;\n34.954624E</td>
+<td>1.92511N 34.954624E</td>
+<td>1.925211</td>
+<td>34.954624</td>
+<td>POINT (34.95462 1.92521)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">158</td>
+<td>Mixed</td>
+<td>UGA0014</td>
+<td>Amudat</td>
+<td>1.925211N;\n34.954624E</td>
+<td>1.92511N 34.954624E</td>
+<td>1.925211</td>
+<td>34.954624</td>
+<td>POINT (34.95462 1.92521)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">159</td>
+<td>Mixed</td>
+<td>UGA0014</td>
+<td>Amudat</td>
+<td>1.925211N;\n34.954624E</td>
+<td>1.92511N 34.954624E</td>
+<td>1.925211</td>
+<td>34.954624</td>
+<td>POINT (34.95462 1.92521)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">160</td>
+<td>Mixed</td>
+<td>UGA0014</td>
+<td>Amudat</td>
+<td>1.925211N;\n34.954624E</td>
+<td>1.92511N 34.954624E</td>
+<td>1.925211</td>
+<td>34.954624</td>
+<td>POINT (34.95462 1.92521)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">161</td>
+<td>Mixed</td>
+<td>UGA0014</td>
+<td>Amudat</td>
+<td>1.925211N;\n34.954624E</td>
+<td>1.92511N 34.954624E</td>
+<td>1.925211</td>
+<td>34.954624</td>
+<td>POINT (34.95462 1.92521)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">162</td>
+<td>Mixed</td>
+<td>UGA0014</td>
+<td>Amudat</td>
+<td>1.925211N;\n34.954624E</td>
+<td>1.92511N 34.954624E</td>
+<td>1.925211</td>
+<td>34.954624</td>
+<td>POINT (34.95462 1.92521)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">163</td>
+<td>Mixed</td>
+<td>UGA0014</td>
+<td>Amudat</td>
+<td>1.925211N;\n34.954624E</td>
+<td>1.92511N 34.954624E</td>
+<td>1.925211</td>
+<td>34.954624</td>
+<td>POINT (34.95462 1.92521)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">164</td>
+<td>Mixed</td>
+<td>UGA0014</td>
+<td>Amudat</td>
+<td>1.925211N;\n34.954624E</td>
+<td>1.92511N 34.954624E</td>
+<td>1.925211</td>
+<td>34.954624</td>
+<td>POINT (34.95462 1.92521)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">165</td>
+<td>Mixed</td>
+<td>UGA0014</td>
+<td>Amudat</td>
+<td>1.925211N;\n34.954624E</td>
+<td>1.92511N 34.954624E</td>
+<td>1.925211</td>
+<td>34.954624</td>
+<td>POINT (34.95462 1.92521)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">166</td>
+<td>Mixed</td>
+<td>UGA0014</td>
+<td>Amudat</td>
+<td>1.925211N;\n34.954624E</td>
+<td>1.92511N 34.954624E</td>
+<td>1.925211</td>
+<td>34.954624</td>
+<td>POINT (34.95462 1.92521)</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<div id="676e285c" class="cell" data-execution_count="3">
+<div class="cell-output cell-output-display cell-output-markdown">
+<p>Note:</p>
+<ul>
+<li>Based on the above provided data, we aggregate information from nine mining sites. We create a 5km buffer around each site, defining these regions as the areas of interest for the classification process.The geometry in the data below is the 5km buffer geometries.</li>
+</ul>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+<div style="height: 400px; width: 100%; overflow-x: auto; overflow-y: auto;">
+    
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Site</th>
+<th data-quarto-table-cell-role="th">Latitude</th>
+<th data-quarto-table-cell-role="th">Longitude</th>
+<th data-quarto-table-cell-role="th">geometry</th>
+<th data-quarto-table-cell-role="th">mining_site_id</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Kaabong1</td>
+<td>3.532690</td>
+<td>34.273660</td>
+<td>POLYGON ((34.31866 3.53269, 34.31646 3.51878, 34.31007 3.50624, 34.30011 3.49628, 34.28757 3.48989, 34.27366 3.48769, 34.25975 3.48989, 34.24721 3.49628, 34.23725 3.50624, 34.23086 3.51878, 34.22866 3.53269, 34.23086 3.54660, 34.23725 3.55914, 34.24721 3.56910, 34.25975 3.57549, 34.27366 3.57769, 34.28757 3.57549, 34.30011 3.56910, 34.31007 3.55914, 34.31646 3.54660, 34.31866 3.53269))</td>
+<td>Min_site1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Moroto1</td>
+<td>2.405936</td>
+<td>34.845722</td>
+<td>POLYGON ((34.89072 2.40594, 34.88852 2.39203, 34.88213 2.37949, 34.87217 2.36953, 34.85963 2.36314, 34.84572 2.36094, 34.83182 2.36314, 34.81927 2.36953, 34.80932 2.37949, 34.80292 2.39203, 34.80072 2.40594, 34.80292 2.41984, 34.80932 2.43239, 34.81927 2.44234, 34.83182 2.44873, 34.84572 2.45094, 34.85963 2.44873, 34.87217 2.44234, 34.88213 2.43239, 34.88852 2.41984, 34.89072 2.40594))</td>
+<td>Min_site2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Moroto2</td>
+<td>2.650031</td>
+<td>34.662469</td>
+<td>POLYGON ((34.70747 2.65003, 34.70527 2.63613, 34.69887 2.62358, 34.68892 2.61363, 34.67637 2.60723, 34.66247 2.60503, 34.64856 2.60723, 34.63602 2.61363, 34.62606 2.62358, 34.61967 2.63613, 34.61747 2.65003, 34.61967 2.66394, 34.62606 2.67648, 34.63602 2.68644, 34.64856 2.69283, 34.66247 2.69503, 34.67637 2.69283, 34.68892 2.68644, 34.69887 2.67648, 34.70527 2.66394, 34.70747 2.65003))</td>
+<td>Min_site3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Nakapiripirit1</td>
+<td>2.030000</td>
+<td>34.425500</td>
+<td>POLYGON ((34.47050 2.03000, 34.46830 2.01609, 34.46191 2.00355, 34.45195 1.99359, 34.43941 1.98720, 34.42550 1.98500, 34.41159 1.98720, 34.39905 1.99359, 34.38909 2.00355, 34.38270 2.01609, 34.38050 2.03000, 34.38270 2.04391, 34.38909 2.05645, 34.39905 2.06641, 34.41159 2.07280, 34.42550 2.07500, 34.43941 2.07280, 34.45195 2.06641, 34.46191 2.05645, 34.46830 2.04391, 34.47050 2.03000))</td>
+<td>Min_site4</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Nakapiripirit2</td>
+<td>1.920730</td>
+<td>34.561800</td>
+<td>POLYGON ((34.60680 1.92073, 34.60460 1.90682, 34.59821 1.89428, 34.58825 1.88432, 34.57571 1.87793, 34.56180 1.87573, 34.54789 1.87793, 34.53535 1.88432, 34.52539 1.89428, 34.51900 1.90682, 34.51680 1.92073, 34.51900 1.93464, 34.52539 1.94718, 34.53535 1.95714, 34.54789 1.96353, 34.56180 1.96573, 34.57571 1.96353, 34.58825 1.95714, 34.59821 1.94718, 34.60460 1.93464, 34.60680 1.92073))</td>
+<td>Min_site5</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>Kaabong2</td>
+<td>3.650640</td>
+<td>34.308850</td>
+<td>POLYGON ((34.35385 3.65064, 34.35165 3.63673, 34.34526 3.62419, 34.33530 3.61423, 34.32276 3.60784, 34.30885 3.60564, 34.29494 3.60784, 34.28240 3.61423, 34.27244 3.62419, 34.26605 3.63673, 34.26385 3.65064, 34.26605 3.66455, 34.27244 3.67709, 34.28240 3.68705, 34.29494 3.69344, 34.30885 3.69564, 34.32276 3.69344, 34.33530 3.68705, 34.34526 3.67709, 34.35165 3.66455, 34.35385 3.65064))</td>
+<td>Min_site6</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>Moroto3</td>
+<td>2.585147</td>
+<td>34.677553</td>
+<td>POLYGON ((34.72255 2.58515, 34.72035 2.57124, 34.71396 2.55870, 34.70400 2.54874, 34.69146 2.54235, 34.67755 2.54015, 34.66365 2.54235, 34.65110 2.54874, 34.64115 2.55870, 34.63476 2.57124, 34.63255 2.58515, 34.63476 2.59905, 34.64115 2.61160, 34.65110 2.62155, 34.66365 2.62794, 34.67755 2.63015, 34.69146 2.62794, 34.70400 2.62155, 34.71396 2.61160, 34.72035 2.59905, 34.72255 2.58515))</td>
+<td>Min_site7</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>Amudat1</td>
+<td>1.450433</td>
+<td>34.787715</td>
+<td>POLYGON ((34.83272 1.45043, 34.83051 1.43653, 34.82412 1.42398, 34.81417 1.41403, 34.80162 1.40764, 34.78771 1.40543, 34.77381 1.40764, 34.76126 1.41403, 34.75131 1.42398, 34.74492 1.43653, 34.74271 1.45043, 34.74492 1.46434, 34.75131 1.47688, 34.76126 1.48684, 34.77381 1.49323, 34.78771 1.49543, 34.80162 1.49323, 34.81417 1.48684, 34.82412 1.47688, 34.83051 1.46434, 34.83272 1.45043))</td>
+<td>Min_site8</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>Amudat2</td>
+<td>1.925211</td>
+<td>34.954624</td>
+<td>POLYGON ((34.99962 1.92521, 34.99742 1.91131, 34.99103 1.89876, 34.98107 1.88881, 34.96853 1.88241, 34.95462 1.88021, 34.94072 1.88241, 34.92817 1.88881, 34.91822 1.89876, 34.91183 1.91131, 34.90962 1.92521, 34.91183 1.93912, 34.91822 1.95166, 34.92817 1.96162, 34.94072 1.96801, 34.95462 1.97021, 34.96853 1.96801, 34.98107 1.96162, 34.99103 1.95166, 34.99742 1.93912, 34.99962 1.92521))</td>
+<td>Min_site9</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Classification output: 1. Latest version using <a href="https://janet68.quarto.pub/karamoja-sentinel-2-classification/">Sentinel 2</a></p>
+<ol start="2" type="1">
+<li>First version using <a href="https://janet68.quarto.pub/karamoja_landsat_classification/">Landsat 8</a></li>
+</ol>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<script src="mining_rates_karamoja_files/libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

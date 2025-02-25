@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#00FF00", "font": {"color": "white"}, "id": "Government of Senegal", "label": "Government of Senegal", "shape": "dot", "size": 16}, {"color": "#00FF00", "font": {"color": "white"}, "id": "SAED", "label": "SAED", "shape": "dot", "size": 22}, {"color": "#00FF00", "font": {"color": "white"}, "id": "CPSP", "label": "CPSP", "shape": "dot", "size": 14}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Controle Economique", "label": "Controle Economique", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Smallholder Farmers", "label": "Smallholder Farmers", "shape": "dot", "size": 24}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Licensed Private Traders", "label": "Licensed Private Traders", "shape": "dot", "size": 18}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Retailers", "label": "Retailers", "shape": "dot", "size": 14}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Consumers", "label": "Consumers", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Village Rice Hullers", "label": "Village Rice Hullers", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Itinerant Traders", "label": "Itinerant Traders", "shape": "dot", "size": 14}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Unlicensed Wholesalers", "label": "Unlicensed Wholesalers", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "WARDA", "label": "WARDA", "shape": "dot", "size": 18}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Local Artisans", "label": "Local Artisans", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Farmer Organizations", "label": "Farmer Organizations", "shape": "dot", "size": 14}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Farmers\u0027 Union", "label": "Farmers\u0027 Union", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Debi-Tiguet Farmers", "label": "Debi-Tiguet Farmers", "shape": "dot", "size": 16}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Rice Millers", "label": "Rice Millers", "shape": "dot", "size": 14}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Extension Agents", "label": "Extension Agents", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Japanese Government", "label": "Japanese Government", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Mauritanian Government", "label": "Mauritanian Government", "shape": "dot", "size": 14}, {"color": "#00FF00", "font": {"color": "white"}, "id": "FAO", "label": "FAO", "shape": "dot", "size": 14}, {"color": "#00FF00", "font": {"color": "white"}, "id": "AfricaRice", "label": "AfricaRice", "shape": "dot", "size": 16}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Local NGOs", "label": "Local NGOs", "shape": "dot", "size": 14}, {"color": "#00FF00", "font": {"color": "white"}, "id": "CASL", "label": "CASL", "shape": "dot", "size": 20}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Local Farmers", "label": "Local Farmers", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Local Communities", "label": "Local Communities", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "AfDB", "label": "AfDB", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "EIB", "label": "EIB", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "JICA", "label": "JICA", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "ISRA", "label": "ISRA", "shape": "dot", "size": 16}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Programme GIPD", "label": "Programme GIPD", "shape": "dot", "size": 16}, {"color": "#00FF00", "font": {"color": "white"}, "id": "University of California, Santa Cruz", "label": "University of California, Santa Cruz", "shape": "dot", "size": 14}, {"color": "#00FF00", "font": {"color": "white"}, "id": "FAO Global IPM Facility", "label": "FAO Global IPM Facility", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Naatal Mbay Program", "label": "Naatal Mbay Program", "shape": "dot", "size": 20}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Maka Diama Producers Network", "label": "Maka Diama Producers Network", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "CNCAS", "label": "CNCAS", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "URAC", "label": "URAC", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "ANACIM", "label": "ANACIM", "shape": "dot", "size": 14}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Farmers", "label": "Farmers", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Village Organizations", "label": "Village Organizations", "shape": "dot", "size": 18}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Market-Oriented Organizations (MOs)", "label": "Market-Oriented Organizations (MOs)", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Community-Oriented Organizations (COs)", "label": "Community-Oriented Organizations (COs)", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "USAID", "label": "USAID", "shape": "dot", "size": 14}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Wula Nafaa", "label": "Wula Nafaa", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "World Bank", "label": "World Bank", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Spanish Donors", "label": "Spanish Donors", "shape": "dot", "size": 12}, {"color": "#00FF00", "font": {"color": "white"}, "id": "Japanese Donors", "label": "Japanese Donors", "shape": "dot", "size": 12}]);
+                  edges = new vis.DataSet([{"arrows": "to", "color": "#FFFFFF", "from": "Government of Senegal", "to": "SAED", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Government of Senegal", "to": "CPSP", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Government of Senegal", "to": "Controle Economique", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "SAED", "to": "Smallholder Farmers", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "SAED", "to": "Licensed Private Traders", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "CPSP", "to": "Licensed Private Traders", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Licensed Private Traders", "to": "Retailers", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Retailers", "to": "Consumers", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Village Rice Hullers", "to": "Itinerant Traders", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Itinerant Traders", "to": "Unlicensed Wholesalers", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "WARDA", "to": "SAED", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "WARDA", "to": "Local Artisans", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "WARDA", "to": "Farmer Organizations", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Farmers\u0027 Union", "to": "Debi-Tiguet Farmers", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Rice Millers", "to": "Licensed Private Traders", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Extension Agents", "to": "Debi-Tiguet Farmers", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Debi-Tiguet Farmers", "to": "Rice Millers", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Japanese Government", "to": "SAED", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Mauritanian Government", "to": "Smallholder Farmers", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "FAO", "to": "Mauritanian Government", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "FAO", "to": "AfricaRice", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Local NGOs", "to": "Smallholder Farmers", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Local NGOs", "to": "CASL", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Farmer Organizations", "to": "Smallholder Farmers", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "CASL", "to": "Local Farmers", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "CASL", "to": "Local Communities", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "CASL", "to": "AfDB", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "CASL", "to": "EIB", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "JICA", "to": "AfricaRice", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "AfricaRice", "to": "Smallholder Farmers", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "ISRA", "to": "SAED", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "ISRA", "to": "Programme GIPD", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Programme GIPD", "to": "Smallholder Farmers", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "University of California, Santa Cruz", "to": "WARDA", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "University of California, Santa Cruz", "to": "ISRA", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "FAO Global IPM Facility", "to": "Programme GIPD", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Naatal Mbay Program", "to": "Maka Diama Producers Network", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Naatal Mbay Program", "to": "CNCAS", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "URAC", "to": "ANACIM", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "ANACIM", "to": "Farmers", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Village Organizations", "to": "Smallholder Farmers", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Market-Oriented Organizations (MOs)", "to": "Village Organizations", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Community-Oriented Organizations (COs)", "to": "Village Organizations", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "USAID", "to": "Wula Nafaa", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "USAID", "to": "Naatal Mbay Program", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "World Bank", "to": "Village Organizations", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Spanish Donors", "to": "Naatal Mbay Program", "width": 1}, {"arrows": "to", "color": "#FFFFFF", "from": "Japanese Donors", "to": "Naatal Mbay Program", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

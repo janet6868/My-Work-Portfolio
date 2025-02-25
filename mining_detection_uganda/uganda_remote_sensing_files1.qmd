@@ -1,0 +1,450 @@
+---
+title: "Remote Sensing"
+date: 2024-01-22
+date-format: long
+author: "Janet"
+format:
+  html:
+    page-layout: full
+    theme:
+          light: flatly
+          dark: darkly
+    toc: false
+    toc-depth: 3
+    toc-location: left
+    number-sections: true
+    smooth-scroll: true
+execute:
+    echo: false
+    warning: false
+    enable: true
+title-block-banner: true
+---
+
+```{=html}
+<style type="text/css">
+
+h1.title {
+  font-size: 20px;
+  color: White;
+  text-align: center;
+}
+h4.author { /* Header 4 - and the author and data headers use this too  */
+    font-size: 16px;
+  font-family: "Source Sans Pro Semibold", Times, serif;
+  color: Red;
+  text-align: center;
+}
+h4.date { /* Header 4 - and the author and data headers use this too  */
+  font-size: 16px;
+  font-family: "Source Sans Pro Semibold", Times, serif;
+  color: Red;
+  text-align: center;
+}
+
+.justify {
+  text-align: justify !important
+}
+
+</style>
+```
+
+
+------------------------------------------------------------------------
+
+::: {style="text-align:center"}
+<h2>Mining activities in Karamoja, Uganda</h2>
+:::
+
+</br>
+
+
+### Introduction
+
+::: {.justify}
+
+The outlined workflow illustrates the process of exploring mining activities in Karamoja Uganda.
+
+ *Questions to answer:*
+
+1. Can we remotely sense mining activities in Uganda?
+
+2. Can we differentiate the different minerals in Karamoja Region in Uganda?
+
+3. Is there a similarity in what is remotely sensed and locally sensed?
+
+ *Some interesting facts about karamoja:*
+
+1. Home to over 12 forest reserves, including Morongole Central, Moroto Central, Kadam, and Nangea-Napore.
+
+2. Boasts around 5 wildlife reserves.
+
+3. Features a number of water bodies, including over 20 main rivers such as Narus, Lohidoo, Kidepo, Nangirongoi, Kikiss, Pager, Achwa, Ajaki.
+
+4. Includes lakes like Lake Opeta, dams such as Yole Dam, and various reservoirs.
+
+### Mining activities
+
+Referring to the Government of Uganda mineral occurrence map, various minerals have been identified in the Karamoja Region, including gold, marble, limestone, mica, copper, and others. We utilize high-resolution images from Google Earth to pinpoint areas of gold mining, marble extraction, limestone deposits, mica occurrences, and charcoal burning activities. 
+
+
+:::
+
+![Karamoja region](karamoja_pic.png){#fig-crm1}
+
+::: {.column-page}
+
+
+
+::: { .callout-tip}
+
+### Key Points:
+::: {.justify}
+We have a sample of data on mining sites in Uganda, provided by mining experts. The latest data comprises 22 sites, with 10 classified as small-scale mining and 12 as large-scale mining sites. Detailed information, including parish, sub-county, mineral names, and miners' associations/companies, is included. Geo-tagging was implemented to enhance mineral map identification and remapping.
+
+On remotely sensed data, majority of mining activities are situated at the base of mountains or in close proximity to rivers. Additionally, some of these mountains are near wildlife or forest reserves as shown in Figure 1. Please note that there are areas confusing whether they are gold mining areas or areas with vegetation loss by rivers expansion or water over bare soil during rainy season.
+
+Some examples:
+
+Moroto district is rich in several minerals, including limestone, gold, and marble. In Loyoro subcounty in Kaboong district, there are several sites  identified  for gold mining that are located at the foot of a mountain.
+
+Mining  activities are close to water bodies such rivers.  We see mica, limestone and gold mining activities close to river Kidepo. On the left we see Kanangorok Hot spring and on its south there are interesting activities that could be gold mining.
+
+:::
+:::
+::: {.panel-tabset}
+
+#### Data from Experts
+```{python}
+#$Env:QUARTO_PYTHON = "C:\Users\P307791\Anaconda3\python.exe"
+#echo $Env:QUARTO_PYTHON
+
+import requests
+import folium
+from bs4 import BeautifulSoup
+import pandas as pd
+import geopandas as gpd
+from shapely.geometry import Point
+import folium
+from geopy.geocoders import Nominatim
+import geopandas as gpd
+import pandas as pd
+from shapely.geometry import MultiLineString
+# Import the CustomIcon class
+from folium.features import CustomIcon
+import datetime
+import os
+import glob
+import rasterio
+import matplotlib.pyplot as plt
+
+import pandas as pd
+import seaborn as sns
+import matplotlib.dates as md
+from IPython.display import display, Markdown
+
+from geopy.geocoders import Nominatim
+from shapely.geometry import Point
+import geopandas as gpd
+import pandas as pd
+```
+```{python}
+miners = ['morulem gold miners association','artisanal mining group','sogdek miners association','ticodep (tapac integrated community development organization)',
+          'lotakero artisanal',"rupa community development trust (rucodet)","moruita artisanal groups (individuals working in an informal way)",
+          "acerer artisanal groups (individuals working in an informal way)","koriitu community development trust (it is also a communal land association)",
+          "local artisanal individuals in lopedo","rakai resources","oks mining company ltd-international/russian", "tororo cement-ugandan",
+          "sunbelt-chinese","sunbird resources ltd-international","kiteelore enterprise lt-local from moroto","jinja marble", "agro-mechanized",
+          "west international holding limited-part of china west cement limited",
+          "ateker cement, uganda development cooporation and savanah mines","ateker cement, uganda development cooporation and savanah mines", "african energy (national)"]
+
+village = [ 'nan','chepkararat','nan','nan','nan','nan','nan','nan','lapedo','nan','nan','nan','kosiroi','nan','nan','nan','nan','nadunget','nan','nan','lopedo','nan']
+mining_scale = ["small","small","small","small","small","small","small","small","small","small","large","large","large","large","large","large","large","large","large",
+                "large","large","large"]
+subcounty = ['morulem','karita','tapac','tapac','rupa',"rupa","moruita","moruita","loyoro","loyoro",'morulem',"karita",
+    'tapac','rupa','rupa','rupa','rupa','rupa','nadunget',"loyoro",'nadunget','loyoro']
+
+district = ['abim','amudat','moroto','moroto',' moroto',"moroto","nakapiripirit","nakapiripirit","kaabong", "kaabong",'abim',"amudat",
+            'moroto','moroto','moroto','moroto','moroto','moroto','moroto',"kaabong",'moroto','kaabong']
+minerals =['gold','gold','limestone','limestone',"gold,marble,limestone","gold,marble,limestone","gold","gold",
+           "gold and limestone", "gold","gold and also does exploration","gold", "limestone and marble","marble and gold","marble",
+           "limestone","limestone","marble and gold","limestone and establishing cement factory, sand/silica","exploration, limestone, planning to establish cement factory in moroto",
+           "exploration, limestone, planning to establish cement factory in moroto",'gold']
+
+status = ['active','active','active','active',"active","active","active","active","active","active","active","active","active for marble", "active","active",
+          "active","active","active", "200 acres for factory, not yet active",'not indicated','not indicated','active']
+# Create a DataFrame from the list
+new_mining_data = pd.DataFrame({'miner_names': miners, 'village': village, 'mining_scale':mining_scale,'subcounty':subcounty,
+                   'district':district,'status':status,'minerals_names': minerals})
+
+
+def geocode_locations(data_frame, location_column):
+    """
+    Geocode locations in a DataFrame and create a GeoDataFrame.
+
+    Parameters:
+    - data_frame (pd.DataFrame): The DataFrame containing location names.
+    - location_column (str): The name of the column containing location names.
+
+    Returns:
+    - gpd.GeoDataFrame: GeoDataFrame with latitude and longitude columns added.
+    """
+
+    # Initialize the geocoder
+    geolocator = Nominatim(user_agent="geocoder")
+
+    # List of place names
+    place_names = list(data_frame[location_column])
+
+    # Create lists to store latitude and longitude
+    latitudes = []
+    longitudes = []
+
+    # Geocode the place names and update the latitude and longitude lists
+    for place_name in place_names:
+        try:
+            location = geolocator.geocode(place_name)
+            if location:
+                latitudes.append(location.latitude)
+                longitudes.append(location.longitude)
+            else:
+                latitudes.append(None)
+                longitudes.append(None)
+        except Exception as e:
+            latitudes.append(None)
+            longitudes.append(None)
+
+    # Append latitude and longitude columns to the DataFrame
+    data_frame['Latitude'] = latitudes
+    data_frame['Longitude'] = longitudes
+
+    # Create a GeoDataFrame
+    geometry = [Point(xy) for xy in zip(data_frame.Longitude, data_frame.Latitude)]
+    location_df = gpd.GeoDataFrame(data_frame, geometry=geometry)
+
+    # Filter out rows with missing latitude values
+    subset_location_df = location_df[~location_df['Latitude'].isnull()]
+
+    return subset_location_df
+
+
+result_geo_df = geocode_locations(new_mining_data, 'subcounty')
+#display(Markdown(result_geo_df.to_markdown(index = True)))
+
+from IPython.display import display, HTML
+
+# Convert your DataFrame to HTML
+html_table = result_geo_df.to_html(index=True)
+
+# Wrap in a scrollable div
+scrollable_table = f"""
+<div style="height: 400px; width: 100%; overflow-x: auto; overflow-y: auto;">
+    {html_table}
+</div>
+"""
+
+# Display the scrollable table
+display(HTML(scrollable_table))
+
+```
+#### Data from remote sensing
+
+```{python}
+common_crs = 'EPSG:4326'
+
+# Define the GeoJSON file paths
+level_4_boundaries = gpd.read_file('../shapefiles/karamoja_level_4_boundaries/karamoja_level_4_bnd.shp').to_crs(common_crs)
+
+# Read the other data
+mining_one = gpd.read_file('../new_mining_sites/landuse_mining_areas_v1.shp').to_crs(common_crs)
+mining_two = gpd.read_file('../new_mining_sites/up_mining_31.shp').to_crs(common_crs)
+mining_three = gpd.read_file('../new_mining_sites/updated_mining_93.shp').to_crs(common_crs)
+
+# Cleaning
+mining_one = mining_one[['Name', 'fclass', 'geometry']]
+# Assuming mining_one is your GeoDataFrame
+mining_one['Name'] = mining_one['Name'].fillna(mining_one['fclass'])
+mining_two = mining_two[['Name', 'geometry']]
+mining_three = mining_three[['Name', 'geometry']]
+concatenated_df = pd.concat([mining_two, mining_three], ignore_index=True)
+
+# Add a new column "general_mineral" to concatenated_df
+concatenated_df['general_mineral'] = concatenated_df['Name'].apply(lambda x: x.split('-')[0])
+# Add a new column "mineral" & "scale" to concatenated_df
+concatenated_df['mineral'] = concatenated_df['Name'].apply(lambda x: x.split('-')[0] if '-' in x else x)
+concatenated_df['scale'] = concatenated_df['Name'].apply(lambda x: x.split('-')[1] if '-' in x else x)
+
+
+common_crs ='EPSG:4326'
+# Define the GeoJSON file paths
+level_4_boundaries = gpd.read_file('../shapefiles/karamoja_level_4_boundaries/karamoja_level_4_bnd.shp').to_crs(common_crs)
+karamoja_roads = gpd.read_file('../shapefiles/karamoja_roads.geojson').to_crs(common_crs)
+karamoja_roads = karamoja_roads[['fclass', 'geometry']]
+waterways = gpd.read_file('../shapefiles/karamoja_waterways.geojson').to_crs(common_crs)
+waterways = waterways[['fclass', 'geometry']]
+
+
+# Perform a spatial join
+merged_df = gpd.sjoin(concatenated_df, level_4_boundaries[['geometry', 'NAME_2', 'NAME_3','NAME_4']], how='left', op='within')
+
+# Rename the 'parish_name' column to 'parish' in the merged DataFrame
+merged_df.rename(columns={'NAME_2': 'county','NAME_3': 'sub_county', 'NAME_4': 'parish'}, inplace=True)
+
+data_rs = merged_df[['county','sub_county', 'parish','mineral', 'scale','geometry']]
+
+# Convert your DataFrame to HTML
+html_table = data_rs.to_html(index=True)
+
+# Wrap in a scrollable div
+scrollable_table = f"""
+<div style="height: 400px; width: 100%; overflow-x: auto; overflow-y: auto;">
+    {html_table}
+</div>
+"""
+
+# Display the scrollable table
+display(HTML(scrollable_table))
+
+```
+#### More exploration
+There are atleast four quarries in Karamoja as shown in Figure 2. For instance at Rengen in Loyoro,there are 2 of them. This could be alluvial gold mining that involves use of water for extraction of the gold from the loose sediments. 
+
+![Sample of quarry in Loyoro](2024-01-23%2002_25_02-Google%20Earth.png){#fig-crm2}
+
+
+#### The mineral distribution map
+```{python}
+token = "sk.eyJ1IjoiamFuZXRtdW1vIiwiYSI6ImNscWE1YTBmMDFzcm0ycXNnanR0NWw3cnUifQ.l8_ScRhMHSfUVt7wqiDTBA" # your mapbox token
+tileurl = 'https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}@2x.png?access_token=' + str(token)
+# Create a Folium map with a title
+#m = folium.Map(location=[1.40955, 34.51543], zoom_start=9, tiles='OpenStreetMap', attr='Mapping Uganda Minerals', control_scale=True)#'OpenStreetMap'
+m = folium.Map(location=[1.40955, 34.51543], zoom_start=9, tiles=tileurl, attr='Mapping Uganda Minerals')
+title = '<h3 align="center" style="font-size:20px"><b>Uganda Minerals Mapping</b></h3>'
+title_html = folium.Html(title, script=True)
+title_popup = folium.Popup(title_html, max_width=2650)
+
+common_crs = 'EPSG:4326'
+
+# Define the GeoJSON file paths
+level_4_boundaries = gpd.read_file('../shapefiles/karamoja_level_4_boundaries/karamoja_level_4_bnd.shp').to_crs(common_crs)
+level_4_boundaries = level_4_boundaries[~level_4_boundaries['geometry'].isna()]
+
+
+# Extracting relevant variables for popup from level_4_boundaries
+level_4_boundaries['popup_message'] = level_4_boundaries[['NAME_3', 'NAME_4']].apply(lambda x: f"Subregion: {x['NAME_3']}<br>District: {x['NAME_4']}", axis=1)
+
+# Read the other data
+mining_one = gpd.read_file('../new_mining_sites/landuse_mining_areas_v1.shp').to_crs(common_crs)
+mining_two = gpd.read_file('../new_mining_sites/up_mining_31.shp').to_crs(common_crs)
+mining_three = gpd.read_file('../new_mining_sites/updated_mining_93.shp').to_crs(common_crs)
+
+# Cleaning
+mining_one = mining_one[['Name', 'fclass', 'geometry']]
+mining_one['Name'] = mining_one['Name'].fillna(mining_one['fclass'])
+mining_two = mining_two[['Name', 'geometry']]
+mining_three = mining_three[['Name', 'geometry']]
+concatenated_df = pd.concat([mining_two, mining_three], ignore_index=True)
+
+# Add a new column "mineral" & "scale" to concatenated_df
+concatenated_df['mineral'] = concatenated_df['Name'].apply(lambda x: x.split('-')[0] if '-' in x else x)
+concatenated_df['scale'] = concatenated_df['Name'].apply(lambda x: x.split('-')[1] if '-' in x else x)
+# Add Karamoja region as a GeoJSON layer with transparent fill and red boundaries
+karamoja_geojson = folium.GeoJson(
+    level_4_boundaries,
+    name='Karamoja Region',
+    style_function=lambda x: {'fillColor': 'transparent', 'color': 'green', 'weight': 2, 'fillOpacity': 0}
+).add_to(m)
+
+# Add markers for each location
+for index, location_info in level_4_boundaries.iterrows():
+    centroid = location_info['geometry'].centroid
+    popup_content = f"Sub-county: {location_info['NAME_3']}<br>Parish: {location_info['NAME_4']}"
+    folium.CircleMarker([centroid.y, centroid.x],radius=1, popup=popup_content).add_to(m)
+
+# Add popup messages for Karamoja region boundaries
+for idx, row in level_4_boundaries.iterrows():
+    sub_county = row['NAME_3']
+    parish = row['NAME_4']
+    geometry = row['geometry']
+
+    popup_content = f"<b>Sub-county:</b> {sub_county}<br><b>Parish:</b> {parish}"
+
+# Add mining one with popups for different land uses
+for _, row in mining_one.iterrows():
+    centroid = row['geometry'].centroid
+    popup_content = f"<b>Name:</b> {row['Name']}<br><b>Land Use:</b> {row['Name']}"  # Customize as needed
+
+    folium.CircleMarker(
+        location=[centroid.y, centroid.x],
+        radius=1,
+        color='#5F0F40',
+        fill=True,
+        fill_color='#5F0F40',
+        popup=popup_content  # Popup with information
+    ).add_to(m)
+
+# Define colors for specific names in the concatenated DataFrame
+name_colors = {
+    'gold': '#F94C10',
+    'marble': '#CEE6F3',
+    'forest fires/ charcoal burning': '#0D1282',
+    'limestone': '#E9FFC2',
+    'mica': '#F0DE36',
+    'charcoal burning': '#0D1282'
+}
+
+# Add mining two and three with popups for different names
+for _, row in concatenated_df.iterrows():
+    mineral = row['mineral']
+    scale = row['scale']
+    color = name_colors.get(mineral, 'gray')  # Use specified color or default to gray
+    split_name = row['Name'].split('-') if '-' in row['Name'] else ['', '']
+    popup_content = f"<b>Mineral:</b> {mineral}<br><b>Scale:</b> {scale}"  # Customize as needed
+
+    folium.RegularPolygonMarker(
+        location=[row['geometry'].y, row['geometry'].x],
+        number_of_sides=5,  # Triangle marker
+        radius=6,
+        color=color,
+        fill=True,
+        fill_color=color,
+        popup=popup_content  # Popup with information
+    ).add_to(m)
+
+# Update the legend HTML to include the new elements
+legend_html = '''
+<div style="position: fixed;
+             bottom: 20%; left: 80%; transform: translate(-70%, -70%);
+             width: 180px; height: 200px;
+             border:2px solid grey; z-index:9999; font-size:12px;
+             background-color: white;
+             opacity: 0.8;">
+    <b>Legend</b><br>
+    <i style="background: #5F0F40; width: 10px; height: 10px; display: inline-block;"></i> Different LULC<br>
+    <i style="background: #F94C10; width: 10px; height: 10px; display: inline-block;"></i> Gold<br>
+    <i style="background: #CEE6F3; width: 10px; height: 10px; display: inline-block;"></i> Marble<br>
+    <i style="background: #0D1282; width: 10px; height: 10px; display: inline-block;"></i> Forest Fires/Charcoal Burning<br>
+    <i style="background: #E9FFC2; width: 10px; height: 10px; display: inline-block;"></i> Limestone<br>
+    <i style="background: #F0DE36; width: 10px; height: 10px; display: inline-block;"></i> Mica<br>
+    <i style="background: #0D1282; width: 10px; height: 10px; display: inline-block;"></i> Charcoal Burning<br>
+    <i style="background: pink; width: 10px; height: 10px; display: inline-block;"></i> Other Minerals<br>
+     <i style="background: #00A9FF; width: 10px; height: 10px; display: inline-block;"></i> Name of parishes<br>
+    <i style="background: green; width: 10px; height: 10px; display: inline-block;"></i> Karamoja Region Boundary<br>
+
+</div>
+'''
+
+m.get_root().html.add_child(folium.Element(legend_html))
+
+# Add a layer control to the map
+folium.LayerControl().add_to(m)
+
+# Add the title to the map
+title_popup.add_to(m)
+
+# Save the map to an HTML file
+m.save('Karamoja_region_map_V8.html')
+m
+
+```
+:::
+:::
