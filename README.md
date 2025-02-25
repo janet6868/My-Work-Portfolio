@@ -19,7 +19,7 @@ This repository showcases a variety of geospatial data analytics projects that l
 - Crop yield estimation based on environmental variables
 
 ### Flood Detection
-- Real-time flood extent mapping using SAR (Synthetic Aperture Radar) data
+- Real-time flood extent mapping using SAR (Synthetic Aperture Radar) and Optical data
 - Historical flood pattern analysis
 - Flood risk modeling and vulnerability assessment
 
