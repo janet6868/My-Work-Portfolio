@@ -1,4 +1,4 @@
-# Earth Observation work
+# My Work Portfolio
 This repository showcases a variety of geospatial data analytics projects that leverage machine learning and remote sensing techniques. The projects demonstrate practical applications in environmental monitoring, agriculture, and disaster management.
 
 ## Key Projects
